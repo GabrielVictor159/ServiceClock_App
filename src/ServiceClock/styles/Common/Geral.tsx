@@ -16,10 +16,20 @@ function keyboardStatus(callback:any){
         });
 }   
 
+const shadow ={
+  shadowColor: '#000',
+  shadowOffset: { width: 5, height: 5 },
+  shadowOpacity: 1,
+  shadowRadius: 0,
+  elevation: 10,
+}
+
  const geral ={
     windowHeight,
     windowWidth,
     keyboardStatus,
+    shadow: shadow
  }
+
 
  export default geral;

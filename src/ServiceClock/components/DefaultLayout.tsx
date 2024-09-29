@@ -1,15 +1,18 @@
 
 import React from 'react';
 import { Text, View } from 'react-native';
-import { DefaultLayoutStyle } from '../styles/Components/DefaultLayoutStyle';
+import { createDefaultLayoutStyle } from '../styles/Components/DefaultLayoutStyle';
+import { useTheme } from '../provider/ThemeProvider';
 interface DefaultLayoutProps{
     children: React.ReactNode;
     containerStyle?: object;
 }
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({children, containerStyle}) => {
+  const { theme, toggleTheme } = useTheme(); 
+  const styles = createDefaultLayoutStyle(theme);
   return (
       <>
-    <View style={[DefaultLayoutStyle.body, containerStyle]}>
+    <View style={[styles.body, containerStyle]}>
       {children}
     </View>
       </>

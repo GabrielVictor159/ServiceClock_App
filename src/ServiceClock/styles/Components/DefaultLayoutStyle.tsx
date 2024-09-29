@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
-import color from "../Common/Color";
-const DefaultLayoutStyle = StyleSheet.create({
-    body: {
-        flex:1,
-        backgroundColor: color.background,
-        justifyContent: 'center',
-        alignItems: 'center'
+import { Theme } from "../../provider/ThemeProvider";
 
-    },
-})
-export { DefaultLayoutStyle}
+export const createDefaultLayoutStyle= (theme: Theme) =>
+    StyleSheet.create({
+        body: {
+            flex:1,
+            backgroundColor: theme.background,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+    });

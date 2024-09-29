@@ -1,12 +1,15 @@
 import { DefaultTheme } from '@react-navigation/native';
-import color from '../Common/Color';
+import { Theme } from '../../provider/ThemeProvider';
 
-const navigationTheme = {
+export const createNavigationTheme = (theme: Theme) =>
+{
+  return  {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: color.background, 
+      background: theme.background, 
     },
 };
+}
 
-export { navigationTheme };
+
