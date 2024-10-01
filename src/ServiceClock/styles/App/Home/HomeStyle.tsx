@@ -11,15 +11,7 @@ export const createHomeStyle = (theme: Theme) =>
       textAlign: 'center',
     },
     Button: {
-      backgroundColor: theme.themeColor,
-      color: theme.highlightedText,
-      padding: 10,
-      borderRadius: 5,
-      width: 200,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      ...geral.shadow,
+      ...geral.createButton(theme)
     },
     ButtonText: {
       color: theme.highlightedText,

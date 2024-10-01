@@ -1,4 +1,5 @@
 import { Dimensions, Keyboard } from 'react-native';
+import { Theme } from '../../provider/ThemeProvider';
 const windowWidth = Dimensions.get('window').width;
  const windowHeight = Dimensions.get('window').height;
  
@@ -23,12 +24,27 @@ const shadow ={
   shadowRadius: 0,
   elevation: 10,
 }
+const createButton =(theme:Theme)=>{
+     return { backgroundColor: theme.themeColor,
+      color: theme.highlightedText,
+      padding: 10,
+      borderRadius: 5,
+      width: 200,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...shadow,
+    }
+}
 
  const geral ={
     windowHeight,
     windowWidth,
     keyboardStatus,
-    shadow: shadow
+    shadow: shadow,
+    createButton(theme:Theme):any{
+      return createButton(theme);
+    }
  }
 
 
