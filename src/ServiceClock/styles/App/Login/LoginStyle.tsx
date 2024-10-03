@@ -7,10 +7,21 @@ export const createLoginStyle = (theme: Theme) =>
     Input: {
         height: 40,
         width:200,
+        backgroundColor:theme.inputBackground,
         borderColor: 'gray',
-        borderWidth: 1,
+        borderWidth: 2,
         marginTop: 10,
         paddingHorizontal: 10,
+        elevation:1
     },
-   
+    label:{
+      color:theme.normalText
+    },
+    Button: {
+      ...geral.createButton(theme)
+    },
+    ButtonText: {
+      color: theme.highlightedText,
+      fontSize: 18,
+    },
   });

@@ -3,28 +3,34 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 export type Theme = {
   background: string;
   normalText: string;
+  inverseText: string;
   highlightedText: string;
   textBackgroundBlack: string;
   themeColor: string;
   themeBackground: string;
+  inputBackground: string;
 };
 
 const lightTheme: Theme = {
   background: '#ffffff',
   normalText: '#1f1f1f',
+  inverseText: '#efefef',
   highlightedText: '#ffffff',
   textBackgroundBlack: '#1f1f1f',
-  themeColor: '#f5a623',
+  themeColor: '#0e6cb9',
   themeBackground: 'white',
+  inputBackground: '#fbfbfb',
 };
 
 const darkTheme: Theme = {
   background: '#284f63',
   normalText: '#ffffff',
+  inverseText: '#222222',
   highlightedText: '#ffffff',
   textBackgroundBlack: '#ffffff',
-  themeColor: '#f5a623',
+  themeColor: '#0e6cb9',
   themeBackground: '#1f1f1f',
+  inputBackground: '#fbfbfb',
 };
 
 interface ThemeContextProps {
