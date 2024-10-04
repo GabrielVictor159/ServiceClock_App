@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; // Importação do Tab Navigator
 import Login from './login/Login';
-import Home from './Home/Home';
+import Home from './login/Home';
 import { usePage } from '../provider/PageProvider';
 import { CardStyleInterpolators } from '@react-navigation/stack';
 import { createNavigationTheme } from '../styles/Navigation/NavigationStyles';
@@ -12,6 +12,7 @@ import IndexClient from './Client/IndexClient';
 import IndexCompany from './Company/IndexCompany';
 import { AuthenticationItem, useAuthentication } from '../provider/AuthenticationProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RegisterCompany from './login/RegisterCompany';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,7 +24,7 @@ const Pages = () => {
   const styles = createNavigationTheme(theme);
 
   useEffect(() => {
-    AsyncStorage.clear();
+    // AsyncStorage.clear();
     const loadAuthenticationItem = async () => {
       const storedItem = await AsyncStorage.getItem('authenticationItem');
       if (storedItem) {
@@ -52,6 +53,7 @@ const Pages = () => {
           >
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="RegisterCompany" component={RegisterCompany} />
           </Stack.Navigator>
         );
       case 1:

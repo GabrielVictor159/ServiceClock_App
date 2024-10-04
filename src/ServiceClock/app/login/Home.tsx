@@ -3,7 +3,7 @@ import React from 'react';
 import { Text,Image, Button, Pressable, TouchableOpacity } from 'react-native';
 import DefaultLayout from '../../components/DefaultLayout';
 import { useTheme } from '../../provider/ThemeProvider';
-import { createHomeStyle } from '../../styles/App/Home/HomeStyle';
+import { createHomeStyle } from '../../styles/App/Login/HomeStyle';
 interface HomeProps {
   navigation: any; 
 }
