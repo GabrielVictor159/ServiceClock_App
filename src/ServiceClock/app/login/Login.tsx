@@ -8,6 +8,7 @@ import { usePage } from '../../provider/PageProvider';
 import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import { AuthenticationItem, useAuthentication } from '../../provider/AuthenticationProvider';
 import { useTranslation } from 'react-i18next';
+import { AuthenticationService } from '../../services/AuthenticationService';
 interface LoginProps {
   navigation: any;
 }
@@ -23,7 +24,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const authenticationService = ServiceFactory.createService(ServiceType.Authentication);
+  const authenticationService = ServiceFactory.createService(ServiceType.Authentication) as AuthenticationService;
 
   const login = async () => {
     const response = await authenticationService.Login(email, password);

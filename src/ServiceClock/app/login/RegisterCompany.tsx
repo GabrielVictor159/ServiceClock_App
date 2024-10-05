@@ -9,6 +9,10 @@ import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import Toast from 'react-native-toast-message';
 import useKeyboardVisibility from '../../provider/KeyboardProvider';
 import { useTranslation } from 'react-i18next';
+import { OtherServices } from '../../services/OtherServices';
+import { CompanyService } from '../../services/CompanyService';
+import { ddiOptions } from '../../utils/ddiOptions';
+import SelectDropdownModal from '../../components/SelectDropdownModal';
 
 interface Country {
     code: string;
@@ -27,7 +31,10 @@ interface City {
     name: string;
 }
 
-const RegisterCompany: React.FC = () => {
+interface RegisterCompanyProps {
+    navigation: any;
+}
+const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
     const { theme } = useTheme();
     const styles = createRegisterCompanyStyle(theme);
     const isKeyboardVisible = useKeyboardVisibility();
@@ -43,14 +50,24 @@ const RegisterCompany: React.FC = () => {
     const [state, setState] = useState<string>('');
     const [country, setCountry] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [postalCode, setPostalCode] = useState<string>('');
+    const [ddi, setDdi] = useState<string>('');
 
     const [countries, setCountries] = useState<Country[]>([]);
     const [states, setStates] = useState<State[]>([]);
     const [cities, setCities] = useState<City[]>([]);
 
-    const [invalidFields, setInvalidFields] = useState<string[]>([]); // Campos inválidos
+    const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
-    const otherService = ServiceFactory.createService(ServiceType.Other);
+    const [modalDDIVisible, setModalDDIVisible] = useState(false);
+
+    const handleDDISelect = (item: string) => {
+        let filter = ddiOptions.find(option=>option.label===item)?.value ?? "";
+        setDdi(filter);
+    };
+
+    const otherService = ServiceFactory.createService(ServiceType.Other) as OtherServices;
+    const companyService = ServiceFactory.createService(ServiceType.Company) as CompanyService;
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -101,7 +118,7 @@ const RegisterCompany: React.FC = () => {
     }, [state]);
 
     const validateFields = (): Boolean => {
-        const fields = ['name', 'email', 'password', 'confirmPassword', 'cnpj', 'address', 'country', 'state', 'city', 'phoneNumber'];
+        const fields = ['name', 'email', 'password', 'confirmPassword', 'cnpj', 'postalCode', 'address', 'country', 'state', 'city', 'phoneNumber'];
         const invalid = fields.filter((field) => {
             switch (field) {
                 case 'name':
@@ -111,9 +128,11 @@ const RegisterCompany: React.FC = () => {
                 case 'password':
                     return !password;
                 case 'confirmPassword':
-                    return !confirmPassword;
+                    return !confirmPassword || confirmPassword !== password;
                 case 'cnpj':
                     return !cnpj;
+                case 'postalCode':
+                    return !postalCode;
                 case 'address':
                     return !address;
                 case 'country':
@@ -123,7 +142,7 @@ const RegisterCompany: React.FC = () => {
                 case 'city':
                     return !city;
                 case 'phoneNumber':
-                    return !phoneNumber;
+                    return !phoneNumber || !ddi;
                 default:
                     return false;
             }
@@ -137,9 +156,31 @@ const RegisterCompany: React.FC = () => {
         if (!validInputs) {
             Toast.show({
                 type: 'error',
-                text1: 'Campos inválidos',
-                text2: 'Por favor preencha todos os dados corretamente'
+                text1: t('error.invalidFields.title'),
+                text2: t('error.invalidFields.message')
             });
+            return;
+        }
+        var response = await companyService.RegisterCompany({
+            Name: name,
+            Password: password,
+            RegistrationNumber: cnpj,
+            Address: address,
+            City: city,
+            State: state,
+            Country: country,
+            PostalCode: postalCode,
+            PhoneNumber: ddi+ " "+ phoneNumber,
+            Email: email,
+        });
+
+        if (response[1] === true) {
+            Toast.show({
+                type: 'success',
+                text1: t('register.sucesss'),
+                text2: t('register.secessMessage')
+            });
+            navigation.navigate('Home');
         }
     }
 
@@ -161,10 +202,10 @@ const RegisterCompany: React.FC = () => {
                             </View>
                             <Text>{"\n"}</Text>
                         </>
-                    ):
-                    <>
-                    <Text>{"\n\n\n\n\n"}</Text>
-                    </>
+                    ) :
+                        <>
+                            <Text>{"\n\n\n\n\n"}</Text>
+                        </>
                 }
                 <View style={styles.InputContainer}>
                     <ScrollView
@@ -227,20 +268,36 @@ const RegisterCompany: React.FC = () => {
 
                         <View>
                             <Text style={styles.label}>{t('register.phoneLabel')}</Text>
+                            <View style={{display:'flex', flexDirection:'row', gap:10}}>
+                                <TouchableOpacity
+                                    style={styles.selectButton}
+                                    onPress={() => setModalDDIVisible(true)}
+                                    >
+                                        <Text>{ddi === ''?'⌵':ddi}</Text>
+                                    </TouchableOpacity>
+                                <TextInputMask
+                                    type={'cel-phone'}
+                                    options={{
+                                        withDDD: true,
+                                        dddMask: '(99) '
+                                    }}
+                                    value={phoneNumber}
+                                    onChangeText={setPhoneNumber}
+                                    style={{...getInputStyle('phoneNumber'),width:150}}
+                                    placeholder={t('register.phonePlaceholder')}
+                                />
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles.label}>{t('register.postalCodeLabel')}</Text>
                             <TextInputMask
-                                type={'cel-phone'}
-                                options={{
-                                    maskType: 'BRL',
-                                    withDDD: true,
-                                    dddMask: '(99) '
-                                }}
-                                value={phoneNumber}
-                                onChangeText={setPhoneNumber}
-                                style={getInputStyle('phoneNumber')}
-                                placeholder={t('register.phonePlaceholder')}
+                                type={'zip-code'}
+                                value={postalCode}
+                                onChangeText={setPostalCode}
+                                style={getInputStyle('postalCode')}
+                                placeholder={t('register.postalCodePlaceholder')}
                             />
                         </View>
-
                         <View>
                             <Text style={styles.label}>{t('register.countryLabel')}</Text>
                             <Picker
@@ -303,6 +360,12 @@ const RegisterCompany: React.FC = () => {
                 >
                     <Text style={styles.ButtonText}>{t('register.submitButton')}</Text>
                 </TouchableOpacity>
+                <SelectDropdownModal
+                    visible={modalDDIVisible}
+                    options={ddiOptions.map((option) => option.label)}
+                    onSelect={handleDDISelect}
+                    onClose={() => setModalDDIVisible(false)}
+                />
             </DefaultLayout>
         </>
     );

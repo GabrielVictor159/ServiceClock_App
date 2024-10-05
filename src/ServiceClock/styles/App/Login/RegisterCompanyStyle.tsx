@@ -47,5 +47,16 @@ export const createRegisterCompanyStyle = (theme: Theme) =>
     Icon: {
       width: 120,
       height: 120,
+    },
+    selectButton: {
+      width:40,
+      height:40,
+      backgroundColor: theme.inputBackground,
+      borderColor: 'gray',
+      borderWidth: 2,
+      marginTop: 10,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     }
   });

@@ -40,7 +40,11 @@ const resources = {
                 selectCity: "Select a city",
                 addressLabel: "Address",
                 addressPlaceholder: "Enter your address",
-                submitButton: "Register"
+                submitButton: "Register",
+                postalCodeLabel: "Postal Code",
+                postalCodePlaceholder: "Enter your postal code",
+                sucesss:'Registered successfully',
+                secessMessage:'Company registered successfully',
             },
             error: {
                 invalidFields: {
@@ -87,7 +91,11 @@ const resources = {
                 selectCity: "Selecione uma cidade",
                 addressLabel: "Endereço",
                 addressPlaceholder: "Digite seu endereço",
-                submitButton: "Registrar"
+                submitButton: "Registrar",
+                postalCodeLabel: "CEP",
+                postalCodePlaceholder: "Digite seu CEP",
+                sucesss:'Registrado com sucesso',
+                sucessMessage:'Empresa registrada com sucesso',
             },
             error: {
                 invalidFields: {
