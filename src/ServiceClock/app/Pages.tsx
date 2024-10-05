@@ -24,7 +24,7 @@ const Pages = () => {
   const styles = createNavigationTheme(theme);
 
   useEffect(() => {
-    // AsyncStorage.clear();
+    AsyncStorage.clear();
     const loadAuthenticationItem = async () => {
       const storedItem = await AsyncStorage.getItem('authenticationItem');
       if (storedItem) {

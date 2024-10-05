@@ -7,12 +7,14 @@ import { createLoginStyle } from '../../styles/App/Login/LoginStyle';
 import { usePage } from '../../provider/PageProvider';
 import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import { AuthenticationItem, useAuthentication } from '../../provider/AuthenticationProvider';
+import { useTranslation } from 'react-i18next';
 interface LoginProps {
   navigation: any;
 }
 
 const Login: React.FC<LoginProps> = ({ navigation }) => {
   const { theme, toggleTheme } = useTheme();
+  const { t, i18n } = useTranslation();
   const { page, setPage } = usePage();
   const {authenticationItem, setAuthenticationItem} = useAuthentication();
 
@@ -47,24 +49,24 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
         />
         <Text>{"\n\n"}</Text>
         <View>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{t('login.labelEmail')}</Text>
           <TextInput
             style={styles.Input}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            placeholder="Digite seu email"
+            placeholder={t('login.placeholderEmail')}
           />
         </View>
         <View>
-          <Text style={styles.label}>Senha</Text>
+          <Text style={styles.label}>{t('login.labelPassword')}</Text>
           <TextInput
             style={styles.Input}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
-            placeholder="Digite sua senha"
+            placeholder={t('login.placeholderPassword')}
           />
         </View>
         <Text>{"\n"}</Text>
@@ -72,7 +74,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
           style={styles.Button}
           onPress={() => { login();}}
         >
-          <Text style={styles.ButtonText}>Entrar</Text>
+          <Text style={styles.ButtonText}>{t('login.button')}</Text>
         </TouchableOpacity>
       </DefaultLayout>
     </>

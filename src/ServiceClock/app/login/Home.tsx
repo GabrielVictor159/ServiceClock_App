@@ -4,12 +4,14 @@ import { Text,Image, Button, Pressable, TouchableOpacity } from 'react-native';
 import DefaultLayout from '../../components/DefaultLayout';
 import { useTheme } from '../../provider/ThemeProvider';
 import { createHomeStyle } from '../../styles/App/Login/HomeStyle';
+import { useTranslation } from 'react-i18next';
 interface HomeProps {
   navigation: any; 
 }
 const Home: React.FC<HomeProps> = ({ navigation}) => {
   const { theme, toggleTheme } = useTheme(); 
   const styles = createHomeStyle(theme);
+  const { t, i18n } = useTranslation();
   return (
       <>
       <DefaultLayout
@@ -25,15 +27,15 @@ const Home: React.FC<HomeProps> = ({ navigation}) => {
         style={styles.Button}
         onPress={() => navigation.navigate('Login')}
         >
-          <Text style={styles.ButtonText}>Entrar</Text>
+          <Text style={styles.ButtonText}>{t('home.button1')}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
         style={styles.Button}
         onPress={() => navigation.navigate('RegisterCompany')}
         >
-          <Text style={styles.ButtonText}>Registrar Empresa</Text>
+          <Text style={styles.ButtonText}>{t('home.button2')}</Text>
         </TouchableOpacity>
-        <Text style={styles.describeText}>Serviço de agendamento de serviços para usuários</Text>
+        <Text style={styles.describeText}>{t('home.subText')}</Text>
       </DefaultLayout>
       </>
   );
