@@ -43,7 +43,7 @@ const resources = {
                 submitButton: "Register",
                 postalCodeLabel: "Postal Code",
                 postalCodePlaceholder: "Enter your postal code",
-                sucesss:'Registered successfully',
+                sucess:'Registered successfully',
                 secessMessage:'Company registered successfully',
             },
             error: {
@@ -94,7 +94,7 @@ const resources = {
                 submitButton: "Registrar",
                 postalCodeLabel: "CEP",
                 postalCodePlaceholder: "Digite seu CEP",
-                sucesss:'Registrado com sucesso',
+                sucess:'Registrado com sucesso',
                 sucessMessage:'Empresa registrada com sucesso',
             },
             error: {

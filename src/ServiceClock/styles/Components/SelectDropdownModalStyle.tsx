@@ -17,6 +17,7 @@ export const createSelectDropdownModalStyle= (theme: Theme) =>
           },
           modalContent: {
             width: '80%',
+            maxHeight: '80%',
             backgroundColor: '#fff',
             borderRadius: 10,
             padding: 10,

@@ -177,8 +177,8 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
         if (response[1] === true) {
             Toast.show({
                 type: 'success',
-                text1: t('register.sucesss'),
-                text2: t('register.secessMessage')
+                text1: t('register.sucess'),
+                text2: t('register.sucessMessage')
             });
             navigation.navigate('Home');
         }

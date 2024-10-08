@@ -24,7 +24,7 @@ const Pages = () => {
   const styles = createNavigationTheme(theme);
 
   useEffect(() => {
-    AsyncStorage.clear();
+    //AsyncStorage.clear();
     const loadAuthenticationItem = async () => {
       const storedItem = await AsyncStorage.getItem('authenticationItem');
       if (storedItem) {
@@ -58,13 +58,23 @@ const Pages = () => {
         );
       case 1:
         return (
-          <Tab.Navigator>
+          <Tab.Navigator
+          initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
             <Tab.Screen name="Home" component={IndexClient} />
           </Tab.Navigator>
         );
       case 2:
         return (
-          <Tab.Navigator>
+          <Tab.Navigator
+          initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
             <Tab.Screen name="Home" component={IndexCompany} />
           </Tab.Navigator>
         );
