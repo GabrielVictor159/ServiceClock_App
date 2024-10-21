@@ -1,3 +1,4 @@
+import { AppointmentService } from "./AppointmentService";
 import { AuthenticationService } from "./AuthenticationService";
 import { CompanyService } from "./CompanyService";
 import { OtherServices } from "./OtherServices";
@@ -5,9 +6,12 @@ import { ServicesService } from "./ServicesService";
 
 export class ServiceFactory {
     static createService(serviceType: ServiceType): 
-    AuthenticationService | OtherServices | CompanyService | ServicesService {
+    AuthenticationService | AppointmentService | OtherServices | CompanyService | ServicesService {
         if (serviceType === ServiceType.Authentication) {
             return new AuthenticationService();
+        }
+        if(serviceType === ServiceType.Appointment){
+            return new AppointmentService();
         }
         if(serviceType === ServiceType.Other){
             return new OtherServices();
@@ -25,6 +29,7 @@ export class ServiceFactory {
 
 export enum ServiceType {
     Authentication = "Authentication",
+    Appointment = "Appointment",
     Company = "Company",
     Services = "Services",
     Other = "Other"

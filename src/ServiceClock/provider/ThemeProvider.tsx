@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export type Theme = {
   background: string;
+  inverseBackground: string;
   normalText: string;
   inverseText: string;
   highlightedText: string;
@@ -13,24 +14,26 @@ export type Theme = {
 
 const lightTheme: Theme = {
   background: '#ffffff',
+  inverseBackground: '#284f63',
   normalText: '#1f1f1f',
   inverseText: '#efefef',
   highlightedText: '#ffffff',
   textBackgroundBlack: '#1f1f1f',
   themeColor: '#0e6cb9',
   themeBackground: 'white',
-  inputBackground: '#fbfbfb',
+  inputBackground: '#ffffff',
 };
 
 const darkTheme: Theme = {
   background: '#284f63',
+  inverseBackground: '#ffffff',
   normalText: '#ffffff',
   inverseText: '#222222',
   highlightedText: '#ffffff',
   textBackgroundBlack: '#ffffff',
   themeColor: '#0e6cb9',
   themeBackground: '#1f1f1f',
-  inputBackground: '#fbfbfb',
+  inputBackground: '#ffffff',
 };
 
 interface ThemeContextProps {

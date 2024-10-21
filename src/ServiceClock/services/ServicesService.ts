@@ -1,14 +1,13 @@
 import axios from "axios";
 import { Environment, EnvironmentType } from "../Environment";
-import { useAuthentication } from "../provider/AuthenticationProvider";
+import { useAuthentication, AuthenticationItem } from '../provider/AuthenticationProvider';
 
 export class ServicesService {
     environment: EnvironmentType;
     constructor() {
         this.environment = new Environment();
     }
-    public async GetServices(data:GetServiceRequest): Promise<[any, boolean]> {
-        let {authenticationItem,setAuthenticationItem} = useAuthentication();
+    public async GetServices(data:GetServiceRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
         try {
             var response = await axios.post(`${this.environment.apiUrl}ListService`,data,{
                 headers:{
@@ -16,13 +15,14 @@ export class ServicesService {
                     'Content-Type': 'application/json'
                 }
             });
+        
             return [response.data, true];
         } catch (error: any) {
+            console.log(error);
             return [error, false];
         }
     }
-    public async DeleteService(data:DeleteServiceRequest): Promise<[any, boolean]> {
-        let {authenticationItem,setAuthenticationItem} = useAuthentication();
+    public async DeleteService(data:DeleteServiceRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
         try {
             var response = await axios.post(`${this.environment.apiUrl}DeleteService`,data,{
                 headers:{
@@ -35,8 +35,7 @@ export class ServicesService {
             return [error, false];
         }
     }
-    public async CreateService(data:CreateServiceRequest): Promise<[any, boolean]> {
-        let {authenticationItem,setAuthenticationItem} = useAuthentication();
+    public async CreateService(data:CreateServiceRequest, authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
         try {
             var response = await axios.post(`${this.environment.apiUrl}CreateService`,data,{
                 headers:{
@@ -62,7 +61,8 @@ export class GetServiceRequest{
     Country?:string;
     PostalCode?:string;
     IndexPage?:number;
-    SizePage?:number;
+    PageSize?:number;
+    
 }
 
 export class DeleteServiceRequest{

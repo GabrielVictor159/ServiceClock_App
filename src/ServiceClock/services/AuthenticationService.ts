@@ -7,7 +7,7 @@ export class AuthenticationService {
         this.environment = new Environment();
     }
 
-    public async Login(email: string, senha: string): Promise<[string, string]> 
+    public async Login(email: string, senha: string): Promise<[any, string]> 
     {
         try {
             const response = await axios.post(this.environment.apiUrl + 'LoginCompany', {
@@ -15,7 +15,7 @@ export class AuthenticationService {
                 Password: senha
             });
     
-            return [response.data.token, "Company"];
+            return [response.data, "Company"];
         } catch (error:any) {
             try {
                 const response = await axios.post(this.environment.apiUrl + 'LoginClient', {
@@ -23,7 +23,7 @@ export class AuthenticationService {
                     Password: senha
                 });
     
-                return [response.data.token, "Client"];
+                return [response.data, "Client"];
             } catch (error2: any) {
                 Toast.show({
                     type: 'error',
@@ -32,6 +32,25 @@ export class AuthenticationService {
                   });
                 return [error2.response.data, ""];
             }
+        }
+    }
+
+    public async IsAuthenticated(token: string): Promise<boolean> {
+        try {
+            const response = await axios.post(
+                this.environment.apiUrl + 'IsAuthenticated',
+                {},
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            
+            return true;
+        } catch (error: any) {
+            return false;
         }
     }
     

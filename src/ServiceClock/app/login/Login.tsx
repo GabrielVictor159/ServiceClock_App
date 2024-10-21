@@ -29,7 +29,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const login = async () => {
     const response = await authenticationService.Login(email, password);
     if(response[1]!==""){
-      setAuthenticationItem(new AuthenticationItem(email, response[0],response[1]));
+      setAuthenticationItem(new AuthenticationItem(response[0].userId,email, response[0].token,response[1]));
     }
     if (response[1]==="Client") {
       setPage(1);

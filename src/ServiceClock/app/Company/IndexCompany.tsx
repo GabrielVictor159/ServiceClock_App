@@ -1,17 +1,16 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react'; 
 import DefaultLayout from '../../components/DefaultLayout';
-import { Calendar } from 'react-native-calendars';
+import AppointmentsCalendar from '../../components/AppointmentsCalendar';
+
 
 const IndexCompany: React.FC = () => {
-    return (
-        <>
-            <DefaultLayout>
-                <Calendar
 
-                />
-            </DefaultLayout>
-        </>
+    return (
+        <DefaultLayout>
+            <>
+            <AppointmentsCalendar />
+            </>
+        </DefaultLayout>
     );
 };
 

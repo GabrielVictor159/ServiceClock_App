@@ -13,6 +13,8 @@ import IndexCompany from './Company/IndexCompany';
 import { AuthenticationItem, useAuthentication } from '../provider/AuthenticationProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RegisterCompany from './login/RegisterCompany';
+import { ServiceFactory, ServiceType } from '../services/ServiceFactory';
+import { AuthenticationService } from '../services/AuthenticationService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,13 +25,20 @@ const Pages = () => {
   const { authenticationItem, setAuthenticationItem } = useAuthentication();
   const styles = createNavigationTheme(theme);
 
+  const authenticationService = ServiceFactory.createService(ServiceType.Authentication) as AuthenticationService;
+  
   useEffect(() => {
     //AsyncStorage.clear();
     const loadAuthenticationItem = async () => {
       const storedItem = await AsyncStorage.getItem('authenticationItem');
       if (storedItem) {
         const parsedItem = JSON.parse(storedItem);
-        setAuthenticationItem(new AuthenticationItem(parsedItem.Email, parsedItem.Token, parsedItem.Type));
+        var isAuthenticated = await authenticationService.IsAuthenticated(parsedItem.Token);
+        if (!isAuthenticated) {
+          AsyncStorage.removeItem('authenticationItem');
+          return;
+        }
+        setAuthenticationItem(new AuthenticationItem(parsedItem.UserId,parsedItem.Email, parsedItem.Token, parsedItem.Type));
         if (parsedItem.Type === "Client") {
           setPage(1);
         }
@@ -40,6 +49,7 @@ const Pages = () => {
     };
     loadAuthenticationItem();
   }, []);
+
 
   const mapPages = () => {
     switch (page) {

@@ -5,8 +5,36 @@ import 'intl-pluralrules';
 const resources = {
     en: {
         translation: {
+            Name: "Name: ",
+            Address: "Address: ",
+            Description: "Description: ",
+            CreationDate: "Creation Date: ",
+            ScheduledDate: "Scheduled Date: ",
+            AppointmentsDayPressNotFutureErrorHearder:"you can't do this",
+            AppointmentsDayPressNotFutureError:"You cannot create a schedule in the past",
+            Status: "Status: ",
+            Comment: "Comment: ",
+            appointmentView:{
+                Aprove:"Aprove",
+                Reject:"Reject",
+                Cancel:"Cancel",
+                adicionarApontamento:"Add Appointment",
+                Add:"Save",
+                CommentPlaceholder:"Type a comment",
+            },
             selectLanguage: "Select Language",
             welcome: "Welcome",
+            selectService: "Services",
+            selectServicePlaceholder: "Select a service...",
+            appointmentsHeader: "Appointments",
+            appointmentStatus:{
+                PendingApproval: "Pending Approval",
+                Approved: "Approved",
+                Rejected: "Rejected",
+                Canceled: "Canceled",
+                Completed: "Completed"
+
+            },
             home: {
                 button1: "Login",
                 button2: "Register Company",
@@ -56,8 +84,37 @@ const resources = {
     },
     pt: {
         translation: {
+            Name: "Nome: ",
+            Address: "Endereço: ",
+            Description: "Descrição: ",
+            CreationDate: "Data de Criação: ",
+            ScheduledDate: "Data Agendada: ",
+            AppointmentsDayPressNotFutureErrorHearder:"você não pode fazer isso",
+            AppointmentsDayPressNotFutureError:"Você não pode criar um agendamento no passado",
+            Status: "Status: ",
+            Comment: "Comentário: ",
+            appointmentView:{
+                Aprove:"Aprovar",
+                Reject:"Rejeitar",
+                Cancel:"Cancelar",
+                adicionarApontamento:"Adicionar Agendamento",
+                Add:"Salvar",
+                Hour:"Hora: ",
+                Comment:"Comentário: ",
+                CommentPlaceholder:"Digite um comentário",
+            },
             selectLanguage: "Selecione o Idioma",
             welcome: "Bem-vindo",
+            selectService: "Serviços",
+            selectServicePlaceholder: "Selecione um serviço...",
+            appointmentsHeader: "Agendamentos",
+            appointmentStatus:{
+                PendingApproval: "Aguardando Aprovação",
+                Approved: "Aprovado",
+                Rejected: "Rejeitado",
+                Canceled: "Cancelado",
+                Completed: "Concluído"
+            },
             home: {
                 button1: "Entrar",
                 button2: "Registrar Empresa",

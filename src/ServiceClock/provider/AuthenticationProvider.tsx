@@ -7,11 +7,13 @@ interface AuthenticationContextType {
 }
 
 export class AuthenticationItem {
+    UserId: string;
     Email: string;
     Token: string;
     Type: string;
 
-    constructor(Email: string, Token: string, Type: string) {
+    constructor(UserId: string, Email: string, Token: string, Type: string) {
+        this.UserId = UserId;
         this.Email = Email;
         this.Token = Token;
         this.Type = Type;
