@@ -1,10 +1,15 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'intl-pluralrules'; 
+import Services from '../app/Company/Services';
 
 const resources = {
     en: {
         translation: {
+            Appointment: "Appointment",
+            Services: "Services",
+            Messages: "Messages",
+            User: "User",
             Name: "Name: ",
             Address: "Address: ",
             Description: "Description: ",
@@ -84,6 +89,10 @@ const resources = {
     },
     pt: {
         translation: {
+            Appointment: "Agendamento",
+            Services: "Serviços",
+            Messages: "Mensagens",
+            User: "Usuário",
             Name: "Nome: ",
             Address: "Endereço: ",
             Description: "Descrição: ",

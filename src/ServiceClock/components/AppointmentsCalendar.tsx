@@ -182,7 +182,6 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         <>
             <Image source={require('../assets/schedule.png')} style={styles.image} />
             <Text style={styles.textHeader}>{t('appointmentsHeader')}</Text>
-            <Text>{"\n"}</Text>
             <View style={styles.linePicker}>
                 <RNPickerSelect
                     onValueChange={(value: string | null) => setSelectedService(value)}

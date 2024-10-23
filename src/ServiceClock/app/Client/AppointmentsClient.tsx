@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import DefaultLayout from '../../components/DefaultLayout';
 import AppointmentsCalendar from '../../components/AppointmentsCalendar';
 
-const IndexClient: React.FC = () => {
+const AppointmentsClient: React.FC = () => {
     return (
         <>
         <DefaultLayout>
@@ -15,4 +15,4 @@ const IndexClient: React.FC = () => {
     );
 };
 
-export default IndexClient;
+export default AppointmentsClient;

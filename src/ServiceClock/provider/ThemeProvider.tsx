@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 export type Theme = {
   background: string;
   inverseBackground: string;
+  inverseBackgroundHighlight:string;
   normalText: string;
   inverseText: string;
   highlightedText: string;
@@ -15,6 +16,7 @@ export type Theme = {
 const lightTheme: Theme = {
   background: '#ffffff',
   inverseBackground: '#284f63',
+  inverseBackgroundHighlight: '#469bc6',
   normalText: '#1f1f1f',
   inverseText: '#efefef',
   highlightedText: '#ffffff',
@@ -27,6 +29,7 @@ const lightTheme: Theme = {
 const darkTheme: Theme = {
   background: '#284f63',
   inverseBackground: '#ffffff',
+  inverseBackgroundHighlight: '#ffffff',
   normalText: '#ffffff',
   inverseText: '#222222',
   highlightedText: '#ffffff',

@@ -3,7 +3,7 @@ import DefaultLayout from '../../components/DefaultLayout';
 import AppointmentsCalendar from '../../components/AppointmentsCalendar';
 
 
-const IndexCompany: React.FC = () => {
+const AppointmentsCompany: React.FC = () => {
 
     return (
         <DefaultLayout>
@@ -14,4 +14,4 @@ const IndexCompany: React.FC = () => {
     );
 };
 
-export default IndexCompany;
+export default AppointmentsCompany;

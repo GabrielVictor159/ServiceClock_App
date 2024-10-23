@@ -7,7 +7,7 @@ export class Environment implements EnvironmentType {
     imageContainer: string;
 
     constructor() {
-        this.apiUrl = 'https://serviceclock.azurewebsites.net/api/';
+        this.apiUrl = 'https://serviceclockback.azurewebsites.net/api/';
         this.imageContainer = 'https://serviceclock.blob.core.windows.net/serviceclockimages/';
     }
 }

@@ -105,6 +105,7 @@ const AppointmentsView: React.FC<AppointmentsViewProps> = ({
     };
     
     return (
+        <>
         <Modal
             animationType="slide"
             transparent={true}
@@ -272,6 +273,7 @@ const AppointmentsView: React.FC<AppointmentsViewProps> = ({
                 </View>
             </View>
         </Modal>
+        </>
     );
 };
 

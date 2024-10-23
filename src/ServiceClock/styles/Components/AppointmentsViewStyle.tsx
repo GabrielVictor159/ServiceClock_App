@@ -11,9 +11,9 @@ export const createAppointmentsViewStyle = (theme: Theme) =>
             backgroundColor: "rgba(0, 0, 0, 0.5)", 
         },
         background:{
-            width: geral.windowWidth,
-            height: geral.windowHeight,
-            position: 'absolute'
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
         },
         modalView: {
             width: geral.windowWidth - 50,
