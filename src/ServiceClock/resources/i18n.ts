@@ -6,6 +6,25 @@ import Services from '../app/Company/Services';
 const resources = {
     en: {
         translation: {
+            Service:{
+                Name:"Name",
+                Description:"Description",
+                Address:"Address",
+                City:"City",
+                State:"State",
+                Country:"Country",
+                PostalCode:"Postal Code",
+                Edit:"Edit",
+                Save:"Save",
+                Cancel:"Cancel",
+                AddService:"Add Service",
+                SelectCountry:"Country",
+                SelectState:"State",
+                SelectCity:"City",
+                Delete:"Delete",
+                ConfirmDelteMessage:"Are you sure you want to delete this service?",
+                Confirm:"Confirm"
+            },
             Appointment: "Appointment",
             Services: "Services",
             Messages: "Messages",
@@ -89,6 +108,25 @@ const resources = {
     },
     pt: {
         translation: {
+            Service:{
+                Name:"Nome",
+                Description:"Descrição",
+                Address:"Endereço",
+                City:"Cidade",
+                State:"Estado",
+                Country:"País",
+                PostalCode:"CEP",
+                Edit:"Editar",
+                Save:"Salvar",
+                Cancel:"Cancelar",
+                AddService:"Adicionar Serviço",
+                SelectCountry:"País",
+                SelectState:"Estado",
+                SelectCity:"Cidade",
+                Delete:"Excluir",
+                ConfirmDelteMessage:"Tem certeza que deseja excluir este serviço?",
+                Confirm:"Confirmar"
+            },
             Appointment: "Agendamento",
             Services: "Serviços",
             Messages: "Mensagens",

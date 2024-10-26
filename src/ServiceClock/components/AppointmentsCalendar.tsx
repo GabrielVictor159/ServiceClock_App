@@ -14,6 +14,8 @@ import { AppointmentStatus } from '../utils/AppointmentStatus';
 import DefaultLayout from './DefaultLayout';
 import AppointmentsView from './AppointmentsView';
 import Toast from 'react-native-toast-message';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 interface AppointmentsCalendarProps {
     isClient?: boolean;
@@ -58,10 +60,13 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         setVisibleRange({ start: startOfYear, end: endOfYear });
     };
 
-    useEffect(() => {
-        listServices();
-        setInitialVisibleRange();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            listServices();
+            setInitialVisibleRange();
+        }, [])
+    );
+
     const appointmentService = ServiceFactory.createService(ServiceType.Appointment) as AppointmentService;
 
     useEffect(() => {

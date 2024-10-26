@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import { Environment, EnvironmentType } from '../Environment';
-export class AuthenticationService {
+import { ServiceCore } from './ServiceCore';
+export class AuthenticationService extends ServiceCore {
     environment: EnvironmentType;
     constructor() {
+        super();
         this.environment = new Environment();
     }
 
@@ -25,11 +27,7 @@ export class AuthenticationService {
     
                 return [response.data, "Client"];
             } catch (error2: any) {
-                Toast.show({
-                    type: 'error',
-                    text1: error2.response.data,
-                    text2: 'Email ou senha incorretos'
-                  });
+                this.ShowError(error2);
                 return [error2.response.data, ""];
             }
         }
@@ -50,6 +48,7 @@ export class AuthenticationService {
             
             return true;
         } catch (error: any) {
+            this.ShowError(error);
             return false;
         }
     }

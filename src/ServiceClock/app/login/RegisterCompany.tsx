@@ -9,27 +9,10 @@ import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import Toast from 'react-native-toast-message';
 import useKeyboardVisibility from '../../provider/KeyboardProvider';
 import { useTranslation } from 'react-i18next';
-import { OtherServices } from '../../services/OtherServices';
+import { City, Country, OtherServices, State } from '../../services/OtherServices';
 import { CompanyService } from '../../services/CompanyService';
 import { ddiOptions } from '../../utils/ddiOptions';
 import SelectDropdownModal from '../../components/SelectDropdownModal';
-
-interface Country {
-    code: string;
-    name: string;
-    geonameId: string;
-}
-
-interface State {
-    code: string;
-    name: string;
-    geonameId: string;
-}
-
-interface City {
-    code: string;
-    name: string;
-}
 
 interface RegisterCompanyProps {
     navigation: any;

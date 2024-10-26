@@ -2,10 +2,12 @@ import axios from "axios";
 import { Environment, EnvironmentType } from "../Environment";
 import { AuthenticationItem } from "../provider/AuthenticationProvider";
 import Toast from "react-native-toast-message";
+import { ServiceCore } from "./ServiceCore";
 
-export class AppointmentService {
+export class AppointmentService extends ServiceCore {
     environment: EnvironmentType;
     constructor() {
+        super();
         this.environment = new Environment();
     }
 
@@ -19,7 +21,7 @@ export class AppointmentService {
             });
             return [response.data, true];
         } catch (error: any) {
-            console.log(error);
+            this.ShowError(error);
             return [error, false];
         }
     }
@@ -34,10 +36,7 @@ export class AppointmentService {
             });
             return [response.data, true];
         } catch (error: any) {
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: error.data[0].Message});
+            this.ShowError(error);
             return [error, false];
         }
     }
@@ -52,11 +51,7 @@ export class AppointmentService {
             });
             return [response.data, true];
         } catch (error: any) {
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: error.data[0].Message
-            });
+            this.ShowError(error);
             return [error, false];
         }
     }
