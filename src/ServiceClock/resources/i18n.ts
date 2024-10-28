@@ -25,6 +25,16 @@ const resources = {
                 ConfirmDelteMessage:"Are you sure you want to delete this service?",
                 Confirm:"Confirm"
             },
+            UserEdit:{
+                nameLabel:"Name",
+                passwordLabel:"Password",
+                registrationNumberLabel:"Registration Number",
+                addressLabel:"Address",
+                cityLabel:"City",
+                stateLabel:"State",
+                postalCodeLabel:"Postal Code",
+                phoneNumberLabel:"Phone Number",
+            },
             Appointment: "Appointment",
             Services: "Services",
             Messages: "Messages",
@@ -126,6 +136,16 @@ const resources = {
                 Delete:"Excluir",
                 ConfirmDelteMessage:"Tem certeza que deseja excluir este serviço?",
                 Confirm:"Confirmar"
+            },
+            UserEdit: {
+                nameLabel: "Nome",
+                passwordLabel: "Senha",
+                registrationNumberLabel: "CNPJ",
+                addressLabel: "Endereço",
+                cityLabel: "Cidade",
+                stateLabel: "Estado",
+                postalCodeLabel: "Código Postal",
+                phoneNumberLabel: "Número de Telefone",
             },
             Appointment: "Agendamento",
             Services: "Serviços",
