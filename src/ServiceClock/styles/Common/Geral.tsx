@@ -3,19 +3,21 @@ import { Theme } from '../../provider/ThemeProvider';
 const windowWidth = Dimensions.get('window').width;
  const windowHeight = Dimensions.get('window').height;
  
-function keyboardStatus(callback:any){
-    const keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-          callback(false)
-        }
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-          callback(true)
-        });
-}   
+ function keyboardStatus(callback:any) {
+  const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => callback(false)
+  );
+  const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => callback(true)
+  );
+
+  return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+  };
+}
 
 const shadow ={
   shadowColor: '#000',

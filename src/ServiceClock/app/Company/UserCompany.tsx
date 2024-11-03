@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
 import DefaultLayout from '../../components/DefaultLayout';
 import { useTranslation } from 'react-i18next';
@@ -15,11 +15,15 @@ import * as FileSystem from 'expo-file-system';
 import { TextInputMask } from 'react-native-masked-text';
 import { City, Country, OtherServices, State } from '../../services/OtherServices';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { usePage } from '../../provider/PageProvider';
+import { useFocusEffect } from '@react-navigation/native';
+import { useLoading } from '../../provider/IsLoadingProvider';
 
 const UserCompany: React.FC = () => {
     const { t } = useTranslation();
     const [user, setUser] = useState<any>();
-    const { authenticationItem } = useAuthentication();
+    const { authenticationItem, setAuthenticationItem } = useAuthentication();
     const { theme } = useTheme();
 
     const styles = createUserCompanyStyle(theme);
@@ -40,14 +44,17 @@ const UserCompany: React.FC = () => {
     const [city, setCity] = useState<City | undefined>(undefined);
     const [state, setState] = useState<State | undefined>(undefined);
     const [country, setCountry] = useState<Country | undefined>(undefined);
+    const { page, setPage } = usePage();
+    const { setIsLoading } = useLoading();
 
-    useEffect(() => {
+    useEffect(()=>{
         getUser();
-    }, []);
+    },[])
+
 
     const getUser = async () => {
         if (authenticationItem) {
-            let [data, isSucess] = await companyService.GetCompanyById(authenticationItem.UserId, authenticationItem);
+            let [data, isSucess] = await companyService.GetCompanyById(authenticationItem.UserId, authenticationItem,setIsLoading);
             if (isSucess) {
                 setUser(data.company);
             }
@@ -55,12 +62,12 @@ const UserCompany: React.FC = () => {
     };
 
     const otherService = ServiceFactory.createService(ServiceType.Other) as OtherServices;
-    useEffect(()=>{
+    useEffect(() => {
         if (user) {
             const selectedCountry = countries.find((c) => c.name === user.country);
             if (selectedCountry) setCountry(selectedCountry);
         }
-    },[countries]);
+    }, [countries]);
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -138,14 +145,14 @@ const UserCompany: React.FC = () => {
                 if (newPassword !== confirmPassword) {
                     Toast.show({
                         text1: 'Erro',
-                        text2: 'As senhas não correspondem.',
+                        text2: t('UserEdit.passwordNotCombine'),
                         type: 'error',
                     });
                     return;
                 }
                 else {
                     (request as any)[currentField] = currentValue;
-                    const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem);
+                    const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem,setIsLoading);
                     if (isSuccess) {
                         setUser((prevUser: any) => ({ ...prevUser, [currentField]: currentValue }));
                     }
@@ -154,7 +161,7 @@ const UserCompany: React.FC = () => {
                 if (!newImageUri || !newImageName) {
                     Toast.show({
                         text1: 'Erro',
-                        text2: 'Não foi possível obter a imagem',
+                        text2: t('UserEdit.unableGetImage'),
                         type: 'error',
                     });
                 } else {
@@ -165,22 +172,21 @@ const UserCompany: React.FC = () => {
                         request.image = base64Image;
                         request.imageName = newImageName;
 
-                        const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem);
+                        const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem,setIsLoading);
                         if (isSuccess) {
                             setUser((prevUser: any) => ({ ...prevUser, image: data.company.image }));
                         }
                     } catch (error) {
-                        console.error("Erro ao converter imagem para base64", error);
                         Toast.show({
                             text1: 'Erro',
-                            text2: 'Falha ao processar a imagem.',
+                            text2: t('UserEdit.errorProcessImage'),
                             type: 'error',
                         });
                     }
                 }
             } else {
                 (request as any)[currentField] = currentValue;
-                const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem);
+                const [data, isSuccess] = await companyService.PatchCompany(request, authenticationItem,setIsLoading);
                 if (isSuccess) {
                     setUser((prevUser: any) => ({ ...prevUser, [currentField]: currentValue }));
                 }
@@ -194,7 +200,7 @@ const UserCompany: React.FC = () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
-            alert('Você precisa permitir o acesso à biblioteca de imagens!');
+            alert(t('UserEdit.notPermissionImage'));
             return;
         }
 
@@ -210,6 +216,11 @@ const UserCompany: React.FC = () => {
             setNewImageName(result.assets[0].fileName);
         }
     };
+
+    const logout = () =>{
+        AsyncStorage.removeItem('authenticationItem');
+        setPage(0);
+    }
 
     return (
         <>
@@ -298,14 +309,14 @@ const UserCompany: React.FC = () => {
                                                     <TextInput
                                                         value={newPassword}
                                                         onChangeText={setNewPassword}
-                                                        placeholder="Digite a nova senha"
+                                                        placeholder={t("UserEdit.placeholderPassword")}
                                                         secureTextEntry
                                                         style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                     />
                                                     <TextInput
                                                         value={confirmPassword}
                                                         onChangeText={setConfirmPassword}
-                                                        placeholder="Confirme a nova senha"
+                                                        placeholder={t("UserEdit.placeholderConfirmPassword")}
                                                         secureTextEntry
                                                         style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5, marginTop: 10 }}
                                                     />
@@ -315,12 +326,15 @@ const UserCompany: React.FC = () => {
                                         case 'image':
                                             return (
                                                 <>
-                                                    <TouchableOpacity onPress={handleImageSelection}>
-                                                        <Text style={{ color: 'blue', marginBottom: 10 }}>Escolher Imagem</Text>
-                                                    </TouchableOpacity>
-                                                    {newImageUri ? (
-                                                        <Image source={{ uri: newImageUri }} style={{ width: 100, height: 100 }} />
+                                                    <View style={{display:'flex', flexDirection:'column', width:'100%',alignItems:'center', justifyContent:'center'}}>
+                                                        <TouchableOpacity onPress={handleImageSelection} style={{display:'flex',flexDirection:'column', alignItems:'center'}}>
+                                                            <Text>{t("UserEdit.pickImage")}</Text>
+                                                            <Image style={{width:50, height:50, objectFit:'cover', tintColor:theme.themeColor, borderWidth:2}} source={require("../../assets/pick_image.png")}/>
+                                                        </TouchableOpacity>
+                                                        {newImageUri ? (
+                                                        <Image source={{ uri: newImageUri }} style={{ width: 100, height: 100, borderWidth:2, borderColor:'black', marginTop:30 }} />
                                                     ) : null}
+                                                    </View>
                                                 </>
                                             );
                                         case 'registrationNumber':
@@ -330,7 +344,7 @@ const UserCompany: React.FC = () => {
                                                         type={'cnpj'}
                                                         style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                         value={currentValue}
-                                                        placeholder={"Digite o novo CNPJ"}
+                                                        placeholder={t("UserEdit.placeholderCNPJ")}
                                                         onChangeText={setCurrentValue} />
                                                 </>
                                             );
@@ -352,7 +366,7 @@ const UserCompany: React.FC = () => {
                                                         states.length > 0 ?
                                                             <>
                                                                 <View style={styles.selectBox}>
-                                                                    <Picker selectedValue={state} onValueChange={(value) => {setState(value); setCurrentValue(value.name);}} style={styles.select}>
+                                                                    <Picker selectedValue={state} onValueChange={(value) => { setState(value); setCurrentValue(value.name); }} style={styles.select}>
                                                                         <Picker.Item label={t("Service.SelectState")} value={undefined} style={styles.pickerLabel} />
                                                                         {states.map((s) => (
                                                                             <Picker.Item key={`state ${s.geonameId}`} label={s.name} value={s} />
@@ -365,7 +379,7 @@ const UserCompany: React.FC = () => {
                                                                 <TextInput
                                                                     value={currentValue}
                                                                     onChangeText={setCurrentValue}
-                                                                    placeholder={`Digite ${currentField}`}
+                                                                    placeholder={t("UserEdit.placeholderNewValue")}
                                                                     style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                                 />
                                                             </>
@@ -379,7 +393,7 @@ const UserCompany: React.FC = () => {
                                                         cities.length > 0 ?
                                                             <>
                                                                 <View style={styles.selectBox}>
-                                                                    <Picker selectedValue={city} onValueChange={(value) => {setCity(value); setCurrentValue(value.name);}} style={styles.select}>
+                                                                    <Picker selectedValue={city} onValueChange={(value) => { setCity(value); setCurrentValue(value.name); }} style={styles.select}>
                                                                         <Picker.Item label={t("Service.SelectCity")} value={undefined} style={styles.pickerLabel} />
                                                                         {cities.map((s) => (
                                                                             <Picker.Item key={`city ${s.code}`} label={s.name} value={s} />
@@ -392,7 +406,7 @@ const UserCompany: React.FC = () => {
                                                                 <TextInput
                                                                     value={currentValue}
                                                                     onChangeText={setCurrentValue}
-                                                                    placeholder={`Digite ${currentField}`}
+                                                                    placeholder={t("UserEdit.placeholderNewValue")}
                                                                     style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                                 />
                                                             </>
@@ -406,7 +420,7 @@ const UserCompany: React.FC = () => {
                                                         type={'cel-phone'}
                                                         style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                         value={currentValue}
-                                                        placeholder={"Digite o novo telefone"}
+                                                        placeholder={t("UserEdit.placeholderNewValue")}
                                                         onChangeText={setCurrentValue} />
                                                 </>
                                             );
@@ -415,7 +429,7 @@ const UserCompany: React.FC = () => {
                                                 <TextInput
                                                     value={currentValue}
                                                     onChangeText={setCurrentValue}
-                                                    placeholder={`Digite ${currentField}`}
+                                                    placeholder={t("UserEdit.placeholderNewValue")}
                                                     style={{ borderWidth: 1, padding: 8, borderColor: 'gray', borderRadius: 5 }}
                                                 />
                                             );
@@ -426,6 +440,11 @@ const UserCompany: React.FC = () => {
                         </>
                     )}
                 </View>
+                <Text>{"\n"}</Text>
+                    <TouchableOpacity style={styles.logoutView} onPress={()=>{logout()}}>
+                        <Image style={styles.logoutIcon} source={require("../../assets/log-out.png")}/>
+                        <Text style={styles.textLogout}>{t("Sair")}</Text>
+                    </TouchableOpacity>
                 <Toast />
             </DefaultLayout>
         </>

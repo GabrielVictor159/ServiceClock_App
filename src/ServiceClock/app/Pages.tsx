@@ -24,11 +24,15 @@ import MensagensCompany from './Company/MensagensCompany';
 import UserCompany from './Company/UserCompany';
 import MensagensClient from './Client/MensagensClient';
 import UserClient from './Client/UserClient';
+import UsersCompanyView from './Company/UsersCompanyView';
+import { useKeyboard } from '../provider/KeyboardProvider';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Stack = createNativeStackNavigator();
 const MaterialTab = createMaterialTopTabNavigator();
 
 const Pages: React.FC = () => {
+  const {isKeyboardHidden} = useKeyboard();
   const { page, setPage } = usePage();
   const { theme } = useTheme();
   const {t, i18n} = useTranslation();
@@ -89,7 +93,7 @@ const Pages: React.FC = () => {
                   title: t('Appointment'), 
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/appointment.png")}
-                    style={{tintColor:theme.inverseText}}/>
+                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
                   ) 
                 }} 
               />
@@ -169,6 +173,17 @@ const Pages: React.FC = () => {
                   title: t('User'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/user_black.png")}
+                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
+                  )  
+                }} 
+              />
+              <MaterialTab.Screen
+                name="Clients"
+                component={UsersCompanyView}
+                options={{ 
+                  title: t('Clients'),
+                  tabBarIcon: ({ color, focused }) => (
+                    <Image source={require("../assets/public-relation.png")}
                     style={{width:25,height:25,tintColor:theme.inverseText}}/>
                   )  
                 }} 

@@ -6,14 +6,15 @@ import { rgbaColor } from "react-native-reanimated/lib/typescript/Colors";
 export const createRegisterCompanyStyle = (theme: Theme) =>
   StyleSheet.create({
     Input: {
-      height: 40,
+      height: 50,
       width: 200,
       backgroundColor: theme.inputBackground,
       borderColor: 'gray',
       borderWidth: 2,
-      marginTop: 10,
       paddingHorizontal: 10,
-      elevation: 1
+      elevation: 1,
+      borderRadius:10,
+      marginTop:10
     },
     InputError: {
       borderColor: 'red',
@@ -22,9 +23,16 @@ export const createRegisterCompanyStyle = (theme: Theme) =>
       height: 450,
       width: '100%',
       padding: 20,
+      borderRadius:10
     },
     label: {
       color: theme.normalText
+    },
+    line:{
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'center',
+      marginTop:20
     },
     Button: {
       ...geral.createButton(theme)
@@ -36,17 +44,16 @@ export const createRegisterCompanyStyle = (theme: Theme) =>
     IconContainer: {
       width: 150,
       height: 150,
-      backgroundColor: 'rgba(150, 150, 150, 1)',
       padding: 20,
       borderRadius: 100,
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      elevation:2
     },
     Icon: {
-      width: 120,
-      height: 120,
+      width: 200,
+      height: 200,
+      elevation:5
     },
     selectButton: {
       width:40,
@@ -58,5 +65,6 @@ export const createRegisterCompanyStyle = (theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      borderRadius:10
     }
   });

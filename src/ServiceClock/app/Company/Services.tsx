@@ -12,6 +12,7 @@ import ServicesLine from '../../components/ServicesLine';
 import ServiceEdit from '../../components/ServiceEdit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
+import { useLoading } from '../../provider/IsLoadingProvider';
 
 const Services: React.FC = () => {
     const { theme } = useTheme();
@@ -20,6 +21,7 @@ const Services: React.FC = () => {
     const { authenticationItem } = useAuthentication();
     const [services, setServices] = useState<any[]>([]);
     const [newItem, setNewItem] = useState(false);
+    const { setIsLoading } = useLoading();
 
     const servicesService = ServiceFactory.createService(ServiceType.Services) as ServicesService;
 
@@ -28,16 +30,11 @@ const Services: React.FC = () => {
             let request = new GetServiceRequest();
             request.IndexPage = 1;
             request.PageSize = 1000;
-            var response = await servicesService.GetServices(request, authenticationItem);
+            var response = await servicesService.GetServices(request, authenticationItem,setIsLoading);
             setServices(response[0].services);
         }
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            listServices();
-        }, [])
-    );
+    
 
     const onSaveNewItem = async (newService: any) => {
         if (authenticationItem) {
@@ -45,7 +42,7 @@ const Services: React.FC = () => {
                 newService.address, newService.city, newService.state, 
                 newService.country, newService.postalCode);
             
-            const [data, isSuccess] = await servicesService.CreateService(request, authenticationItem);
+            const [data, isSuccess] = await servicesService.CreateService(request, authenticationItem,setIsLoading);
             if (isSuccess) {
                 listServices();
                 setNewItem(false);

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Theme } from "../../provider/ThemeProvider";
 
-export const createDefaultLayoutStyle= (theme: Theme) =>
+export const createDefaultLayoutStyle= (theme: Theme, isKeyboardHidden: boolean = true) =>
     StyleSheet.create({
         body: {
             flex:1,
@@ -17,7 +17,7 @@ export const createDefaultLayoutStyle= (theme: Theme) =>
           },
           boxOptions:{
             position: 'absolute', 
-            display: 'flex', 
+            display: isKeyboardHidden? 'flex':'none', 
             flexDirection: 'row', 
             justifyContent: 'center', 
             alignItems: 'center', 
@@ -29,7 +29,7 @@ export const createDefaultLayoutStyle= (theme: Theme) =>
             paddingRight: 10,
             paddingTop: 5,
             paddingBottom: 5,
-            zIndex:1
+            zIndex:1,
           },
           ButtonOptionsMenu:{
             width:40,

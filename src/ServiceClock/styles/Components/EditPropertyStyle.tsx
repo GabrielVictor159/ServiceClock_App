@@ -27,4 +27,18 @@ export const createEditPropertyStyle= (theme: Theme) =>
             justifyContent: 'space-between',
             marginTop: 20,
         },
+        button:{
+            paddingHorizontal:20,
+            paddingVertical:10,
+            backgroundColor:theme.themeColorHighlitch,
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center',
+            borderRadius:5,
+            elevation:5
+        },
+        textButton:{
+            color:'white',
+            fontWeight:'bold'
+        }
     });

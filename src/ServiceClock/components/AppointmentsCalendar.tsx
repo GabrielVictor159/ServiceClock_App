@@ -4,7 +4,7 @@ import { Calendar } from 'react-native-calendars';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import { useTheme } from '../provider/ThemeProvider';
+import { useTheme, Theme } from '../provider/ThemeProvider';
 import { createAppointmentsCalendarStyle } from '../styles/Components/AppointmentsCalendarStyle';
 import { useAuthentication } from '../provider/AuthenticationProvider';
 import { ServiceFactory, ServiceType } from '../services/ServiceFactory';
@@ -16,6 +16,7 @@ import AppointmentsView from './AppointmentsView';
 import Toast from 'react-native-toast-message';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
+import { useLoading } from '../provider/IsLoadingProvider';
 
 interface AppointmentsCalendarProps {
     isClient?: boolean;
@@ -35,6 +36,8 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
     const [appointmentVisible, setAppointmentVisible] = useState(false);
     const [selectAppointments, setSelectAppointments] = useState<any[]>([]);
     const [selectDay, setSelectDay] = useState<string | null>(null);
+
+    const { setIsLoading } = useLoading();
 
     const servicesService = ServiceFactory.createService(ServiceType.Services) as ServicesService;
 
@@ -59,13 +62,11 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         setVisibleYear(currentDate.year());
         setVisibleRange({ start: startOfYear, end: endOfYear });
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            listServices();
+    useEffect(()=>{
+        listServices();
             setInitialVisibleRange();
-        }, [])
-    );
+    },[]);
+
 
     const appointmentService = ServiceFactory.createService(ServiceType.Appointment) as AppointmentService;
 
@@ -83,7 +84,7 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
                 request.MinDate = visibleRange.start;
                 request.MaxDate = visibleRange.end;
                 if (authenticationItem) {
-                    var response = await appointmentService.ListAppointments(request, authenticationItem);
+                    var response = await appointmentService.ListAppointments(request, authenticationItem,setIsLoading);
                     setAppointments(response[0].appointments);
                 }
             }
@@ -153,7 +154,7 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
             let request = new GetServiceRequest();
             request.IndexPage = 1;
             request.PageSize = 1000;
-            var response = await servicesService.GetServices(request, authenticationItem);
+            var response = await servicesService.GetServices(request, authenticationItem,setIsLoading);
             setServices(response[0].services);
         }
     };
@@ -213,13 +214,18 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
                 </>
             )
             }
-            <Text>{"\n"}</Text>
             <Calendar
                 style={styles.Calendar}
                 onVisibleMonthsChange={handleVisibleMonthsChange}
                 markedDates={markedDates}
                 onDayPress={handleDayPress}
                 markingType={'custom'}
+                theme={{
+                    textDayFontSize: 12,
+                    textDayHeaderFontSize: 12,
+                    textMonthFontSize:13,
+                  }}
+                
             />
             <AppointmentsView service={selectedService} day={selectDay} isClient={isClient} visible={appointmentVisible} setVisible={setAppointmentVisible} appointmentsVisible={selectAppointments} appointments={appointments} setAppointments={setAppointments} setAppointmentsVisible={setSelectAppointments} />
         </>

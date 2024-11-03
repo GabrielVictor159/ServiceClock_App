@@ -5,16 +5,20 @@ import geral from "../Common/Geral";
 export const createAppointmentsCalendarStyle = (theme: Theme) =>
     StyleSheet.create({
         image:{
-            width:170,
-            height:170,
+            width:140,
+            height:140,
         },
         Calendar: {
           borderWidth: 2,
           elevation: 5,
           width: geral.windowWidth - 50,
+          height:320,
+          display:'flex',
           backgroundColor: 'white',
           borderRadius:20,
           overflow: 'hidden',
+          fontSize:5,
+          marginTop:20
         },
         descriptionBox:{
             width: '80%',
@@ -27,7 +31,7 @@ export const createAppointmentsCalendarStyle = (theme: Theme) =>
             marginTop: 20,
         },
         textHeader: {
-          fontSize: 30,
+          fontSize: 25,
           color: theme.normalText,
           fontWeight: 'bold',
           marginBottom: 10,
@@ -39,7 +43,7 @@ export const createAppointmentsCalendarStyle = (theme: Theme) =>
           elevation: 5,
         },
         picker: {
-          fontSize: 16,
+          fontSize: 8,
           paddingVertical: 12,
           paddingHorizontal: 10,
           width: 250,

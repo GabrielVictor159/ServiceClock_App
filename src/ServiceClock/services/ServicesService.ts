@@ -9,8 +9,9 @@ export class ServicesService extends ServiceCore {
         super();
         this.environment = new Environment();
     }
-    public async GetServices(data: GetServiceRequest, authenticationItem: AuthenticationItem): Promise<[any, boolean]> {
+    public async GetServices(data: GetServiceRequest, authenticationItem: AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}ListService`, data, {
                 headers: {
                     Authorization: `${authenticationItem!.Token}`,
@@ -22,10 +23,13 @@ export class ServicesService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
-    public async DeleteService(data: DeleteServiceRequest, authenticationItem: AuthenticationItem): Promise<[any, boolean]> {
+    public async DeleteService(data: DeleteServiceRequest, authenticationItem: AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}DeleteService`, data, {
                 headers: {
                     Authorization: `${authenticationItem!.Token}`,
@@ -36,10 +40,13 @@ export class ServicesService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
-    public async CreateService(data: CreateServiceRequest, authenticationItem: AuthenticationItem): Promise<[any, boolean]> {
+    public async CreateService(data: CreateServiceRequest, authenticationItem: AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}CreateService`, data, {
                 headers: {
                     Authorization: `${authenticationItem!.Token}`,
@@ -50,10 +57,13 @@ export class ServicesService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
-    public async EditService(data: EditServiceRequest, authenticationItem: AuthenticationItem): Promise<[any, boolean]> {
+    public async EditService(data: EditServiceRequest, authenticationItem: AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.patch(`${this.environment.apiUrl}EditService`, data, {
                 headers: {
                     Authorization: `${authenticationItem!.Token}`,
@@ -62,9 +72,10 @@ export class ServicesService extends ServiceCore {
             });
             return [response.data, true];
         } catch (error: any) {
-            console.log(error.response.data);
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 

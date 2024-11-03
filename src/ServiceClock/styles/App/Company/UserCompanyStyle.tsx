@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Theme } from "../../../provider/ThemeProvider";
-import geral from "../../Common/Geral";
+import geral from '../../Common/Geral';
 
 
 export const createUserCompanyStyle = (theme: Theme) =>
@@ -29,9 +29,11 @@ export const createUserCompanyStyle = (theme: Theme) =>
       fontFamily: 'Roboto'
     },
     LineText: {
+      maxWidth:'100%',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      flexWrap:'wrap',
       gap: 10
     },
     ImgEditLine: {
@@ -61,4 +63,20 @@ export const createUserCompanyStyle = (theme: Theme) =>
       gap: 10,
       alignItems: 'center'
     },
+    logoutIcon:{
+      width:60,
+      height:60,
+      elevation:5
+    },
+    logoutView:{
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'center',
+      gap:5
+    },
+    textLogout:{
+      fontWeight:'bold',
+      fontSize:17,
+      color:theme.redColor
+    }
   });

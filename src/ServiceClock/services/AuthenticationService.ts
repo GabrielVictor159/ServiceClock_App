@@ -48,7 +48,6 @@ export class AuthenticationService extends ServiceCore {
             
             return true;
         } catch (error: any) {
-            this.ShowError(error);
             return false;
         }
     }

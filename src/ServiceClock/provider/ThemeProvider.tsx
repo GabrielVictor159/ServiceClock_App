@@ -9,8 +9,10 @@ export type Theme = {
   highlightedText: string;
   textBackgroundBlack: string;
   themeColor: string;
+  themeColorHighlitch: string;
   themeBackground: string;
   inputBackground: string;
+  redColor:string;
 };
 
 const lightTheme: Theme = {
@@ -22,8 +24,11 @@ const lightTheme: Theme = {
   highlightedText: '#ffffff',
   textBackgroundBlack: '#1f1f1f',
   themeColor: '#0e6cb9',
+  themeColorHighlitch: "#16aee0",
   themeBackground: 'white',
   inputBackground: '#ffffff',
+  redColor:"#f05648"
+
 };
 
 const darkTheme: Theme = {
@@ -35,8 +40,10 @@ const darkTheme: Theme = {
   highlightedText: '#ffffff',
   textBackgroundBlack: '#ffffff',
   themeColor: '#0e6cb9',
+  themeColorHighlitch: "#16aee0",
   themeBackground: '#1f1f1f',
   inputBackground: '#ffffff',
+  redColor:"#f05648"
 };
 
 interface ThemeContextProps {

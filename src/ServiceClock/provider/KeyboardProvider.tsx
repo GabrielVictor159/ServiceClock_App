@@ -1,26 +1,38 @@
-// src/hooks/useKeyboardVisibility.ts
-import { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { Keyboard } from 'react-native';
 
-const useKeyboardVisibility = () => {
-    const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
+interface KeyboardContextType {
+    isKeyboardHidden: boolean;
+}
+
+const KeyboardContext = createContext<KeyboardContextType | undefined>(undefined);
+
+const KeyboardProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [isKeyboardHidden, setIsKeyboardHidden] = useState<boolean>(true);
 
     useEffect(() => {
-        const showListener = Keyboard.addListener('keyboardDidShow', () => {
-            setIsKeyboardVisible(true);
-        });
-
-        const hideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setIsKeyboardVisible(false);
-        });
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardHidden(false));
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardHidden(true));
 
         return () => {
-            showListener.remove();
-            hideListener.remove();
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
         };
     }, []);
 
-    return isKeyboardVisible;
+    return (
+        <KeyboardContext.Provider value={{ isKeyboardHidden }}>
+            {children}
+        </KeyboardContext.Provider>
+    );
 };
 
-export default useKeyboardVisibility;
+const useKeyboard = () => {
+    const context = useContext(KeyboardContext);
+    if (!context) {
+        throw new Error('useKeyboard must be used within a KeyboardProvider');
+    }
+    return context;
+};
+
+export { KeyboardProvider, useKeyboard };

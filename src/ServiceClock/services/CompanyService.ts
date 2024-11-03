@@ -12,8 +12,9 @@ export class CompanyService extends ServiceCore {
         this.environment = new Environment();
     }
 
-    public async GetCompanyById(Id:string,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
+    public async GetCompanyById(Id:string,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.get(`${this.environment.apiUrl}GetCompany/${Id}`,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -24,11 +25,14 @@ export class CompanyService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error.response.data, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 
-    public async GetCompany(data: GetCompanyRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
+    public async GetCompany(data: GetCompanyRequest,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}GetCompany`,data,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -39,11 +43,14 @@ export class CompanyService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error.response.data, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 
-    public async RegisterCompany(data: any): Promise<[any, boolean]> {
+    public async RegisterCompany(data: any, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}CreateCompany`,
                 data
             );
@@ -51,11 +58,14 @@ export class CompanyService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error.response.data, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 
-    public async PatchCompany(data:PatchCompanyRequest | any,authenticationItem:AuthenticationItem): Promise<[any, boolean]>{
+    public async PatchCompany(data:PatchCompanyRequest | any,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]>{
         try {
+            setIsLoading?.(true);
             var response = await axios.patch(`${this.environment.apiUrl}PatchCompany`,data,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -66,6 +76,8 @@ export class CompanyService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error.response.data, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 }

@@ -7,12 +7,12 @@ import { useTheme } from '../../provider/ThemeProvider';
 import { createRegisterCompanyStyle } from '../../styles/App/Login/RegisterCompanyStyle';
 import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import Toast from 'react-native-toast-message';
-import useKeyboardVisibility from '../../provider/KeyboardProvider';
 import { useTranslation } from 'react-i18next';
 import { City, Country, OtherServices, State } from '../../services/OtherServices';
 import { CompanyService } from '../../services/CompanyService';
 import { ddiOptions } from '../../utils/ddiOptions';
 import SelectDropdownModal from '../../components/SelectDropdownModal';
+import { useKeyboard } from '../../provider/KeyboardProvider';
 
 interface RegisterCompanyProps {
     navigation: any;
@@ -20,7 +20,7 @@ interface RegisterCompanyProps {
 const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
     const { theme } = useTheme();
     const styles = createRegisterCompanyStyle(theme);
-    const isKeyboardVisible = useKeyboardVisibility();
+    const {isKeyboardHidden} = useKeyboard();
     const { t, i18n } = useTranslation();
 
     const [name, setName] = useState<string>('');
@@ -175,7 +175,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
         <>
             <DefaultLayout>
                 {
-                    !isKeyboardVisible ? (
+                    isKeyboardHidden ? (
                         <>
                             <View style={styles.IconContainer}>
                                 <Image
@@ -199,7 +199,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                         showsVerticalScrollIndicator={true}
 
                     >
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.nameLabel')}</Text>
                             <TextInput
                                 style={getInputStyle('name')}
@@ -208,7 +208,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                                 placeholder={t('register.namePlaceholder')}
                             />
                         </View>
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.emailLabel')}</Text>
                             <TextInput
                                 style={getInputStyle('email')}
@@ -217,7 +217,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                                 placeholder={t('register.emailPlaceholder')}
                             />
                         </View>
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.passwordLabel')}</Text>
                             <TextInput
                                 style={getInputStyle('password')}
@@ -227,7 +227,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                                 placeholder={t('register.passwordPlaceholder')}
                             />
                         </View>
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.confirmPasswordLabel')}</Text>
                             <TextInput
                                 style={getInputStyle('confirmPassword')}
@@ -238,7 +238,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                             />
                         </View>
 
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.cnpjLabel')}</Text>
                             <TextInputMask
                                 type={'cnpj'}
@@ -249,9 +249,9 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                             />
                         </View>
 
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.phoneLabel')}</Text>
-                            <View style={{display:'flex', flexDirection:'row', gap:10}}>
+                            <View style={{display:'flex', flexDirection:'row', gap:10,alignItems:'center'}}>
                                 <TouchableOpacity
                                     style={styles.selectButton}
                                     onPress={() => setModalDDIVisible(true)}
@@ -271,7 +271,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                                 />
                             </View>
                         </View>
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.postalCodeLabel')}</Text>
                             <TextInputMask
                                 type={'zip-code'}
@@ -281,12 +281,12 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                                 placeholder={t('register.postalCodePlaceholder')}
                             />
                         </View>
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.countryLabel')}</Text>
                             <Picker
                                 selectedValue={country}
                                 onValueChange={(itemValue: string) => setCountry(itemValue)}
-                                style={getInputStyle('country')}
+                                style={{...getInputStyle('country')}}
                             >
                                 <Picker.Item label={t('register.selectCountry')} value="" />
                                 {countries.map((country) => (
@@ -295,7 +295,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                             </Picker>
                         </View>
 
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.stateLabel')}</Text>
                             <Picker
                                 selectedValue={state}
@@ -310,7 +310,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                             </Picker>
                         </View>
 
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.cityLabel')}</Text>
                             <Picker
                                 selectedValue={city}
@@ -325,7 +325,7 @@ const RegisterCompany: React.FC<RegisterCompanyProps> = ({ navigation }) => {
                             </Picker>
                         </View>
 
-                        <View>
+                        <View style={styles.line}>
                             <Text style={styles.label}>{t('register.addressLabel')}</Text>
                             <TextInput
                                 style={getInputStyle('address')}

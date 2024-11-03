@@ -4,11 +4,13 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import geral from '../styles/Common/Geral';
 import { Theme, useTheme } from '../provider/ThemeProvider';
+import { useKeyboard } from '../provider/KeyboardProvider';
 
 const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
+  const { isKeyboardHidden } = useKeyboard();
   const { state, descriptors, navigation } = props;
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles(theme,isKeyboardHidden);
 
   return (
         <View style={styles.container}>
@@ -57,7 +59,7 @@ const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
   );
 };
 
-const createStyles = (theme:Theme,)=> StyleSheet.create({
+const createStyles = (theme:Theme, isKeyboardHidden: boolean = true)=> StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -65,10 +67,10 @@ const createStyles = (theme:Theme,)=> StyleSheet.create({
     elevation: 5, 
     zIndex: 1,
     position:'absolute',
-    height:'7%',
+    height:isKeyboardHidden? '7%':"15%",
     width:'100%',
-    top:'93%' ,
-    display: 'flex',
+    top:isKeyboardHidden?'93%':"85%" ,
+    display: isKeyboardHidden?'flex':'none',
     alignItems: 'center',
   },
   item:{

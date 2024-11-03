@@ -11,8 +11,9 @@ export class AppointmentService extends ServiceCore {
         this.environment = new Environment();
     }
 
-    public async ListAppointments(data:ListAppointmentRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
+    public async ListAppointments(data:ListAppointmentRequest,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}ListAppointment`,data,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -23,11 +24,14 @@ export class AppointmentService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 
-    public async RequestAppointment(data:RequestAppointmentRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
+    public async RequestAppointment(data:RequestAppointmentRequest,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}RequestAppointment`,data,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -38,11 +42,14 @@ export class AppointmentService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 
-    public async AlterStateAppointment(data:AlterStateAppointmentRequest,authenticationItem:AuthenticationItem): Promise<[any, boolean]> {
+    public async AlterStateAppointment(data:AlterStateAppointmentRequest,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
+            setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}AlterStateAppointment`,data,{
                 headers:{
                     Authorization: `${authenticationItem!.Token}`,
@@ -53,6 +60,8 @@ export class AppointmentService extends ServiceCore {
         } catch (error: any) {
             this.ShowError(error);
             return [error, false];
+        } finally {
+            setIsLoading?.(false);
         }
     }
 }

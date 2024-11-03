@@ -25,7 +25,7 @@ const UserImage: React.FC<UserImageProps> = ({
     return (
         <View style={[styles.box, { width, height }, styleBox]}>
             <Image
-                source={source === null ? localImage : { uri: environment.imageContainer + source }}
+                source={source === null || source ==="" ? localImage : { uri: environment.imageContainer + source }}
                 style={styles.image}
             />
         </View>
