@@ -25,6 +25,10 @@ const Services: React.FC = () => {
 
     const servicesService = ServiceFactory.createService(ServiceType.Services) as ServicesService;
 
+    useEffect(()=>{
+        listServices();
+    },[]);
+    
     const listServices = async () => {
         if (authenticationItem) {
             let request = new GetServiceRequest();

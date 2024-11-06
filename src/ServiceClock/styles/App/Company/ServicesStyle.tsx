@@ -6,15 +6,15 @@ import geral from "../../Common/Geral";
 export const createServiceStyle = (theme: Theme) =>
   StyleSheet.create({
     icon: {
-      width: 200,
-      height: 200,
+      width: 150,
+      height: 150,
     },
     headerText: {
       fontSize: 30,
       color: theme.normalText,
       fontWeight: 'bold',
       textAlign: 'center',
-      marginTop: 20
+      marginTop: 10
     },
     boxServices: {
       width: geral.windowWidth - 70,

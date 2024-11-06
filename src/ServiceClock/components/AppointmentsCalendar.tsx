@@ -22,7 +22,7 @@ interface AppointmentsCalendarProps {
     isClient?: boolean;
 }
 
-const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: AppointmentsCalendarProps) => {
+const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({ isClient }: AppointmentsCalendarProps) => {
     const { t } = useTranslation();
     const { theme } = useTheme();
     const styles = createAppointmentsCalendarStyle(theme);
@@ -62,11 +62,14 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         setVisibleYear(currentDate.year());
         setVisibleRange({ start: startOfYear, end: endOfYear });
     };
-    useEffect(()=>{
-        listServices();
-            setInitialVisibleRange();
-    },[]);
 
+
+    useFocusEffect(
+        useCallback(() => {
+            listServices();
+            setInitialVisibleRange();
+        }, [])
+    );
 
     const appointmentService = ServiceFactory.createService(ServiceType.Appointment) as AppointmentService;
 
@@ -74,8 +77,7 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         const listAppointment = async () => {
             if (selectedService && visibleRange) {
                 var request = new ListAppointmentRequest();
-                if(isClient)
-                {
+                if (isClient) {
                     request.ClientId = authenticationItem?.UserId;
                 }
                 request.ServiceId = selectedService.id;
@@ -84,7 +86,7 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
                 request.MinDate = visibleRange.start;
                 request.MaxDate = visibleRange.end;
                 if (authenticationItem) {
-                    var response = await appointmentService.ListAppointments(request, authenticationItem,setIsLoading);
+                    var response = await appointmentService.ListAppointments(request, authenticationItem, setIsLoading);
                     setAppointments(response[0].appointments);
                 }
             }
@@ -94,7 +96,9 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
     }, [selectedService, visibleRange]);
 
     useEffect(() => {
-        markAppointmentDates(appointments);
+        if (appointments != null && appointments.length > 0) {
+            markAppointmentDates(appointments);
+        }
     }, [appointments]);
 
     const markAppointmentDates = (appointments: any[]) => {
@@ -154,7 +158,7 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
             let request = new GetServiceRequest();
             request.IndexPage = 1;
             request.PageSize = 1000;
-            var response = await servicesService.GetServices(request, authenticationItem,setIsLoading);
+            var response = await servicesService.GetServices(request, authenticationItem, setIsLoading);
             setServices(response[0].services);
         }
     };
@@ -171,14 +175,14 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
         });
 
         const isFutureOrToday = moment(clickedDate).isSameOrAfter(moment().startOf('day'));
-        if(!isFutureOrToday){
+        if (!isFutureOrToday) {
             Toast.show({
                 type: 'info',
                 text1: t('AppointmentsDayPressNotFutureErrorHearder'),
                 text2: t('AppointmentsDayPressNotFutureError')
             });
         }
-        setAppointmentVisible(isClient?isFutureOrToday:(sortedAppointments.length>0 && isFutureOrToday));
+        setAppointmentVisible(isClient ? isFutureOrToday : (sortedAppointments.length > 0 && isFutureOrToday));
         setSelectAppointments(sortedAppointments);
         setSelectDay(clickedDate);
     };
@@ -223,9 +227,9 @@ const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({isClient }: 
                 theme={{
                     textDayFontSize: 12,
                     textDayHeaderFontSize: 12,
-                    textMonthFontSize:13,
-                  }}
-                
+                    textMonthFontSize: 13,
+                }}
+
             />
             <AppointmentsView service={selectedService} day={selectDay} isClient={isClient} visible={appointmentVisible} setVisible={setAppointmentVisible} appointmentsVisible={selectAppointments} appointments={appointments} setAppointments={setAppointments} setAppointmentsVisible={setSelectAppointments} />
         </>

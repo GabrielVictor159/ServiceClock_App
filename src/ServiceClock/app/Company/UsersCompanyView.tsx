@@ -35,11 +35,9 @@ const UsersCompanyView: React.FC = () => {
     const styles = createUsersCompanyViewStyle(theme, isKeyboardHidden);
     const { setIsLoading } = useLoading();
 
-    useFocusEffect(
-        useCallback(() => {
-            getClients();
-        }, [page])
-    );
+    useEffect(() => {
+        getClients();
+    }, [page]);
 
     const getClients = async () => {
         if (authenticationItem && !isLoadinging && hasMoreClients) {
@@ -69,7 +67,7 @@ const UsersCompanyView: React.FC = () => {
 
     const onDelete = async () => {
         if (deleteId && authenticationItem) {
-            const [data, IsSucess] = await clientService.DeleteClient(deleteId, authenticationItem,setIsLoading);
+            const [data, IsSucess] = await clientService.DeleteClient(deleteId, authenticationItem, setIsLoading);
             if (IsSucess) {
                 setClients((prevClients) => prevClients.filter(client => client.id !== deleteId));
             }
@@ -79,7 +77,7 @@ const UsersCompanyView: React.FC = () => {
 
     const onSaveNewClient = async (clientData: CreateClientRequest) => {
         if (authenticationItem) {
-            const [data, IsSucess] = await clientService.CreateClient(clientData, authenticationItem,setIsLoading);
+            const [data, IsSucess] = await clientService.CreateClient(clientData, authenticationItem, setIsLoading);
             if (IsSucess) {
                 setSearch(true);
                 setHasMoreClients(true);
@@ -161,7 +159,7 @@ const UsersCompanyView: React.FC = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Modal visible={deleteId !== undefined} animationType="slide" transparent={true} style={{position:'absolute',zIndex:1}}>
+                <Modal visible={deleteId !== undefined} animationType="slide" transparent={true} style={{ position: 'absolute', zIndex: 1 }}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <Text>{t("ConfirmDelete")}</Text>
@@ -176,7 +174,7 @@ const UsersCompanyView: React.FC = () => {
                         </View>
                     </View>
                 </Modal>
-                <Modal visible={viewClient !== undefined} animationType="slide" transparent={true} style={{zIndex:1}}>
+                <Modal visible={viewClient !== undefined} animationType="slide" transparent={true} style={{ zIndex: 1 }}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             {viewClient && (
@@ -223,7 +221,7 @@ const UsersCompanyView: React.FC = () => {
                         </View>
                     </View>
                 </Modal>
-                <Modal  visible={newClientVisible} animationType="slide" transparent={true} style={{zIndex:1}}>
+                <Modal visible={newClientVisible} animationType="slide" transparent={true} style={{ zIndex: 1 }}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <ClientForm

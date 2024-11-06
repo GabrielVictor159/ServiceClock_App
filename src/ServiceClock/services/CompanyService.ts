@@ -15,9 +15,9 @@ export class CompanyService extends ServiceCore {
     public async GetCompanyById(Id:string,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
             setIsLoading?.(true);
-            var response = await axios.get(`${this.environment.apiUrl}GetCompany/${Id}`,{
+            var response = await axios.get(`${this.environment.apiUrl}GetCompanyById/${Id}`,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -35,7 +35,7 @@ export class CompanyService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}GetCompany`,data,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -68,7 +68,7 @@ export class CompanyService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.patch(`${this.environment.apiUrl}PatchCompany`,data,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });

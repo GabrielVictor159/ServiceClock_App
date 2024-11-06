@@ -16,7 +16,7 @@ export class AppointmentService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}ListAppointment`,data,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -34,7 +34,7 @@ export class AppointmentService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}RequestAppointment`,data,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -52,7 +52,7 @@ export class AppointmentService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}AlterStateAppointment`,data,{
                 headers:{
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });

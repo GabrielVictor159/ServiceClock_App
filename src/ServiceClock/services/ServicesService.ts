@@ -14,7 +14,7 @@ export class ServicesService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}ListService`, data, {
                 headers: {
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -32,7 +32,7 @@ export class ServicesService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}DeleteService`, data, {
                 headers: {
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -49,7 +49,7 @@ export class ServicesService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.post(`${this.environment.apiUrl}CreateService`, data, {
                 headers: {
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -66,7 +66,7 @@ export class ServicesService extends ServiceCore {
             setIsLoading?.(true);
             var response = await axios.patch(`${this.environment.apiUrl}EditService`, data, {
                 headers: {
-                    Authorization: `${authenticationItem!.Token}`,
+                    Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'
                 }
             });
