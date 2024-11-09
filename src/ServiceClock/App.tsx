@@ -10,6 +10,7 @@ import i18n from './resources/i18n';
 import { KeyboardProvider } from './provider/KeyboardProvider';
 import { LoadingProvider } from './provider/IsLoadingProvider';
 import LoadingScreen from './components/LoadingScreen';
+import { EspecialButtonsProvider } from './provider/EspecialButtonsProvider';
 
 const App: React.FC = () => {
   return (
@@ -19,9 +20,11 @@ const App: React.FC = () => {
           <ThemeProvider>
             <AuthenticationProvider>
               <KeyboardProvider>
-                <Pages />
-                <Toast />
-                <LoadingScreen />
+                <EspecialButtonsProvider>
+                  <Pages />
+                  <Toast />
+                  <LoadingScreen />
+                </EspecialButtonsProvider>
               </KeyboardProvider>
             </AuthenticationProvider>
           </ThemeProvider>

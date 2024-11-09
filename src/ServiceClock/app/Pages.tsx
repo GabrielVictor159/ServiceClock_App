@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { View, Text,Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import Login from './login/Login';
 import Home from './login/Home';
 import { usePage } from '../provider/PageProvider';
@@ -17,7 +17,7 @@ import RegisterCompany from './login/RegisterCompany';
 import { ServiceFactory, ServiceType } from '../services/ServiceFactory';
 import { AuthenticationService } from '../services/AuthenticationService';
 import Services from './Company/Services';
-import CustomTabBar from '../components/CustomTabBar'; 
+import CustomTabBar from '../components/CustomTabBar';
 import EspecialButtons from '../components/EspecialButtons';
 import { useTranslation } from 'react-i18next';
 import MensagensCompany from './Company/MensagensCompany';
@@ -27,15 +27,17 @@ import UserClient from './Client/UserClient';
 import UsersCompanyView from './Company/UsersCompanyView';
 import { useKeyboard } from '../provider/KeyboardProvider';
 import LoadingScreen from '../components/LoadingScreen';
+import { useEspecialButtons } from '../provider/EspecialButtonsProvider';
 
 const Stack = createNativeStackNavigator();
 const MaterialTab = createMaterialTopTabNavigator();
 
 const Pages: React.FC = () => {
-  const {isKeyboardHidden} = useKeyboard();
+  const { isKeyboardHidden } = useKeyboard();
   const { page, setPage } = usePage();
   const { theme } = useTheme();
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { isEspecialButtonsVisible, setIsEspecialButtonsVisible } = useEspecialButtons();
   const { setAuthenticationItem } = useAuthentication();
   const styles = createNavigationTheme(theme);
 
@@ -75,7 +77,7 @@ const Pages: React.FC = () => {
             <Stack.Screen name="RegisterCompany" component={RegisterCompany} />
           </Stack.Navigator>
         );
-      case 1: 
+      case 1:
         return (
           <View style={{ flex: 1 }}>
             <MaterialTab.Navigator
@@ -89,40 +91,40 @@ const Pages: React.FC = () => {
               <MaterialTab.Screen
                 name='Appointment'
                 component={AppointmentsClient}
-                options={{ 
-                  title: t('Appointment'), 
+                options={{
+                  title: t('Appointment'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/appointment.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  ) 
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="Messages"
                 component={MensagensClient}
-                options={{ 
+                options={{
                   title: t('Messages'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/chat.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="User"
                 component={UserClient}
-                options={{ 
+                options={{
                   title: t('User'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/user_black.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
             </MaterialTab.Navigator>
           </View>
         );
-      case 2: 
+      case 2:
         return (
           <View style={{ flex: 1 }}>
             <MaterialTab.Navigator
@@ -136,57 +138,57 @@ const Pages: React.FC = () => {
               <MaterialTab.Screen
                 name='Appointment'
                 component={AppointmentsCompany}
-                options={{ 
-                  title: t('Appointment'), 
+                options={{
+                  title: t('Appointment'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/appointment.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  ) 
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="Services"
                 component={Services}
-                options={{ 
+                options={{
                   title: t('Services'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/technical-service.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="Messages"
                 component={MensagensCompany}
-                options={{ 
+                options={{
                   title: t('Messages'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/chat.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="User"
                 component={UserCompany}
-                options={{ 
+                options={{
                   title: t('User'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/user_black.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
               <MaterialTab.Screen
                 name="Clients"
                 component={UsersCompanyView}
-                options={{ 
+                options={{
                   title: t('Clients'),
                   tabBarIcon: ({ color, focused }) => (
                     <Image source={require("../assets/public-relation.png")}
-                    style={{width:25,height:25,tintColor:theme.inverseText}}/>
-                  )  
-                }} 
+                      style={{ width: 25, height: 25, tintColor: theme.inverseText }} />
+                  )
+                }}
               />
             </MaterialTab.Navigator>
           </View>
@@ -201,7 +203,9 @@ const Pages: React.FC = () => {
       <NavigationContainer theme={styles}>
         {mapPages()}
       </NavigationContainer>
-      <EspecialButtons />
+      {isEspecialButtonsVisible &&
+        <EspecialButtons />
+      }
     </>
   );
 };

@@ -6,6 +6,7 @@ import Services from '../app/Company/Services';
 const resources = {
     en: {
         translation: {
+            Message:"Message",
             Save:"Save",
             Cancel:"Cancel",
             Sair:"Logout",
@@ -146,6 +147,7 @@ const resources = {
     },
     pt: {
         translation: {
+            Message:"Mensagem",
             Save:"Salvar",
             Cancel:"Cancelar",
             Sair:"Sair",

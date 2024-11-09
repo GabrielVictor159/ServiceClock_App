@@ -66,6 +66,8 @@ export const createMensagensCompanyStyle = (theme: Theme, isKeyboardHidden: bool
             flexDirection: 'row',
             gap: 10,
             display: 'flex',
+            paddingBottom:20,
+            borderBottomWidth:1
         },
         columnInformation: {
             flexDirection: 'column',

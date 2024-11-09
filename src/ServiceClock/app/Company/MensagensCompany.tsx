@@ -11,6 +11,8 @@ import { ServiceFactory, ServiceType } from '../../services/ServiceFactory';
 import { createMensagensCompanyStyle } from '../../styles/App/Company/MensagensCompanyStyle';
 import { useLoading } from '../../provider/IsLoadingProvider';
 import { useTheme } from '../../provider/ThemeProvider';
+import MessageChat from '../../components/MessageChat';
+import { useEspecialButtons } from '../../provider/EspecialButtonsProvider';
 
 const MensagensCompany: React.FC = () => {
     const { isKeyboardHidden } = useKeyboard();
@@ -26,12 +28,19 @@ const MensagensCompany: React.FC = () => {
     const [nameFilter, setNameFilter] = useState<string>("");
     const [clients, setClients] = useState<any[]>([]);
 
+
+    const [selectClient, setSelectClient] = useState<any>();
+
     const styles = createMensagensCompanyStyle(theme, isKeyboardHidden);
 
     useFocusEffect(
         useCallback(() => {
-            setClients([]);
-            getClients();
+            if (clients.length === 0) {
+                setClients([]);
+                setHasMoreClients(true);
+                setIsLoading(false);
+                getClients();
+            }
         }, [])
     );
 
@@ -82,49 +91,60 @@ const MensagensCompany: React.FC = () => {
 
     return (
         <>
-            <DefaultLayout>
-                <Image
-                    style={styles.icon}
-                    source={require("../../assets/comments.png")}
-                />
-                <View style={styles.boxInput}>
-                    <TextInput
-                        placeholder={t("SearchByName")}
-                        value={nameFilter}
-                        style={styles.input}
-                        onChangeText={(event: string) => {
-                            setNameFilter(event);
-                        }}
-                    />
-                    <TouchableOpacity onPress={() => { handleSearch() }} style={styles.button}>
-                        <Text style={styles.textButton}>{t("Search")}</Text>
-                    </TouchableOpacity>
-                </View>
-                <Text>{"\n"}</Text>
-                <View style={styles.boxClients}>
-                    <ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
-                        {clients && clients.map((client, index) => (
-                            <View key={`client ${index}`} style={{ marginTop: index > 0 ? 20 : 0 }}>
-                                <TouchableOpacity>
-                                    <View style={styles.lineInformation}>
-                                        <UserImage width={50} height={50} source={client.image} />
-                                        <View style={styles.columnInformation}>
-                                            <View style={styles.lineText}>
-                                                <Text style={styles.TextHighlight}>{`${t("UserEdit.nameLabel")}: `}</Text>
-                                                <Text style={styles.NormalText}>{`${client.name}`}</Text>
+
+            {selectClient == null ?
+                <DefaultLayout>
+                    <>
+
+                        <Image
+                            style={styles.icon}
+                            source={require("../../assets/comments.png")}
+                        />
+                        <View style={styles.boxInput}>
+                            <TextInput
+                                placeholder={t("SearchByName")}
+                                value={nameFilter}
+                                style={styles.input}
+                                onChangeText={(event: string) => {
+                                    setNameFilter(event);
+                                }}
+                            />
+                            <TouchableOpacity onPress={() => { handleSearch() }} style={styles.button}>
+                                <Text style={styles.textButton}>{t("Search")}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text>{"\n"}</Text>
+                        <View style={styles.boxClients}>
+                            <ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
+                                {clients && clients.map((client, index) => (
+                                    <View key={`client ${index}`} style={{ marginTop: index > 0 ? 20 : 0 }}>
+                                        <TouchableOpacity onPress={() => { setSelectClient(client); }}>
+                                            <View style={styles.lineInformation}>
+                                                <UserImage width={50} height={50} source={client.image} />
+                                                <View style={styles.columnInformation}>
+                                                    <View style={styles.lineText}>
+                                                        <Text style={styles.TextHighlight}>{`${t("UserEdit.nameLabel")}: `}</Text>
+                                                        <Text style={styles.NormalText}>{`${client.name}`}</Text>
+                                                    </View>
+                                                    <View style={styles.lineText}>
+                                                        <Text style={styles.TextHighlight}>{`${t("UserEdit.labelEmail")}: `}</Text>
+                                                        <Text style={styles.NormalText}>{`${client.email}`}</Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            <View style={styles.lineText}>
-                                                <Text style={styles.TextHighlight}>{`${t("UserEdit.labelEmail")}: `}</Text>
-                                                <Text style={styles.NormalText}>{`${client.email}`}</Text>
-                                            </View>
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </View>
-            </DefaultLayout>
+                                ))}
+                            </ScrollView>
+                        </View>
+                    </>
+                </DefaultLayout>
+                :
+                <>
+                    <MessageChat otherUser={selectClient} onBack={()=>{setSelectClient(undefined);}}/>
+                </>
+            }
+
         </>
     );
 };
