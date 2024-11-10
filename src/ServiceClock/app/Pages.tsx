@@ -28,6 +28,7 @@ import UsersCompanyView from './Company/UsersCompanyView';
 import { useKeyboard } from '../provider/KeyboardProvider';
 import LoadingScreen from '../components/LoadingScreen';
 import { useEspecialButtons } from '../provider/EspecialButtonsProvider';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createNativeStackNavigator();
 const MaterialTab = createMaterialTopTabNavigator();
@@ -200,12 +201,16 @@ const Pages: React.FC = () => {
 
   return (
     <>
-      <NavigationContainer theme={styles}>
-        {mapPages()}
-      </NavigationContainer>
-      {isEspecialButtonsVisible &&
-        <EspecialButtons />
-      }
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <>
+          <NavigationContainer theme={styles}>
+            {mapPages()}
+          </NavigationContainer>
+          {isEspecialButtonsVisible &&
+            <EspecialButtons />
+          }
+        </>
+      </GestureHandlerRootView>
     </>
   );
 };

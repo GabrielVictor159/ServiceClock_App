@@ -3,7 +3,7 @@ import { Theme } from "../../../provider/ThemeProvider";
 import geral from "../../Common/Geral";
 
 
-export const createServiceStyle = (theme: Theme) =>
+export const createServiceStyle = (theme: Theme, isKeyboardHidden:boolean) =>
   StyleSheet.create({
     icon: {
       width: 150,
@@ -42,19 +42,5 @@ export const createServiceStyle = (theme: Theme) =>
     addServiceText: {
       color: 'white',
       fontWeight: 'bold',
-    },
-    modalContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-      backgroundColor: 'white',
-      padding: 20,
-      borderRadius: 10,
-      width: '80%',
-      alignItems: 'center',
-      gap: 10,
     },
   });

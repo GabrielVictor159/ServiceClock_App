@@ -13,10 +13,12 @@ import ServiceEdit from '../../components/ServiceEdit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { useLoading } from '../../provider/IsLoadingProvider';
+import { useKeyboard } from '../../provider/KeyboardProvider';
 
 const Services: React.FC = () => {
     const { theme } = useTheme();
-    const styles = createServiceStyle(theme);
+    const { isKeyboardHidden } = useKeyboard();
+    const styles = createServiceStyle(theme, isKeyboardHidden);
     const { t, i18n } = useTranslation();
     const { authenticationItem } = useAuthentication();
     const [services, setServices] = useState<any[]>([]);
@@ -25,28 +27,28 @@ const Services: React.FC = () => {
 
     const servicesService = ServiceFactory.createService(ServiceType.Services) as ServicesService;
 
-    useEffect(()=>{
+    useEffect(() => {
         listServices();
-    },[]);
-    
+    }, []);
+
     const listServices = async () => {
         if (authenticationItem) {
             let request = new GetServiceRequest();
             request.IndexPage = 1;
             request.PageSize = 1000;
-            var response = await servicesService.GetServices(request, authenticationItem,setIsLoading);
+            var response = await servicesService.GetServices(request, authenticationItem, setIsLoading);
             setServices(response[0].services);
         }
     };
-    
+
 
     const onSaveNewItem = async (newService: any) => {
         if (authenticationItem) {
-            let request = new CreateServiceRequest(newService.name, newService.description, 
-                newService.address, newService.city, newService.state, 
+            let request = new CreateServiceRequest(newService.name, newService.description,
+                newService.address, newService.city, newService.state,
                 newService.country, newService.postalCode);
-            
-            const [data, isSuccess] = await servicesService.CreateService(request, authenticationItem,setIsLoading);
+
+            const [data, isSuccess] = await servicesService.CreateService(request, authenticationItem, setIsLoading);
             if (isSuccess) {
                 listServices();
                 setNewItem(false);
@@ -76,11 +78,7 @@ const Services: React.FC = () => {
                     </View>
 
                     <Modal visible={newItem} animationType="slide" transparent={true}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                <ServiceEdit onSave={onSaveNewItem} onCancel={onCancelNewItem} />
-                            </View>
-                        </View>
+                        <ServiceEdit onSave={onSaveNewItem} onCancel={onCancelNewItem} />
                     </Modal>
                 </View>
             </DefaultLayout>

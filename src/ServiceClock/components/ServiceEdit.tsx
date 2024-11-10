@@ -6,6 +6,7 @@ import { City, Country, OtherServices, State } from '../services/OtherServices';
 import { ServiceFactory, ServiceType } from '../services/ServiceFactory';
 import geral from '../styles/Common/Geral';
 import { TextInputMask } from 'react-native-masked-text';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface ServiceEditProps {
     service?: any;
@@ -96,62 +97,68 @@ const ServiceEdit: React.FC<ServiceEditProps> = ({ service, onSave, onCancel }) 
 
     return (
         <>
-            <View style={styles.lineInput}>
-                <Text>{t("Service.Name")}</Text>
-                <TextInput style={styles.input} value={name} placeholder={t("Service.Name")} onChangeText={setName} />
-            </View>
+            <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                    <ScrollView>
+                        <View style={styles.lineInput}>
+                            <Text>{t("Service.Name")}</Text>
+                            <TextInput style={styles.input} value={name} placeholder={t("Service.Name")} onChangeText={setName} />
+                        </View>
 
-            <View style={styles.lineInput}>
-                <Text>{t("Service.Description")}</Text>
-                <TextInput style={styles.input} value={description} placeholder={t("Service.Description")} onChangeText={setDescription} />
-            </View>
+                        <View style={styles.lineInput}>
+                            <Text>{t("Service.Description")}</Text>
+                            <TextInput style={styles.input} value={description} placeholder={t("Service.Description")} onChangeText={setDescription} />
+                        </View>
 
-            <View style={styles.lineInput}>
-                <Text>{t("Service.Address")}</Text>
-                <TextInput style={styles.input} value={address} placeholder={t("Service.Address")} onChangeText={setAddress} />
-            </View>
+                        <View style={styles.lineInput}>
+                            <Text>{t("Service.Address")}</Text>
+                            <TextInput style={styles.input} value={address} placeholder={t("Service.Address")} onChangeText={setAddress} />
+                        </View>
 
-            <View style={styles.lineInput}>
-                <Text>{t("Service.PostalCode")}</Text>
-                <TextInputMask type={'zip-code'} style={styles.input} value={postalCode} placeholder={t("Service.PostalCode")} onChangeText={setPostalCode} />
-            </View>
+                        <View style={styles.lineInput}>
+                            <Text>{t("Service.PostalCode")}</Text>
+                            <TextInputMask type={'zip-code'} style={styles.input} value={postalCode} placeholder={t("Service.PostalCode")} onChangeText={setPostalCode} />
+                        </View>
 
-            <View style={styles.selectLine}>
-                <Text>{t("Service.SelectCountry")}</Text>
-                <View style={styles.selectBox}>
-                    <Picker selectedValue={country} onValueChange={(value) => setCountry(value)} style={styles.select}>
-                        <Picker.Item label={t("Service.SelectCountry")} value={undefined} style={styles.pickerLabel} />
-                        {countries.map((c) => (
-                            <Picker.Item key={`country ${c.geonameId}`} label={c.name} value={c} />
-                        ))}
-                    </Picker>
+                        <View style={styles.selectLine}>
+                            <Text>{t("Service.SelectCountry")}</Text>
+                            <View style={styles.selectBox}>
+                                <Picker selectedValue={country} onValueChange={(value) => setCountry(value)} style={styles.select}>
+                                    <Picker.Item label={t("Service.SelectCountry")} value={undefined} style={styles.pickerLabel} />
+                                    {countries.map((c) => (
+                                        <Picker.Item key={`country ${c.geonameId}`} label={c.name} value={c} />
+                                    ))}
+                                </Picker>
+                            </View>
+                        </View>
+
+                        <View style={styles.selectLine}>
+                            <Text>{t("Service.SelectState")}</Text>
+                            <View style={styles.selectBox}>
+                                <Picker selectedValue={state} onValueChange={(value) => setState(value)} style={styles.select}>
+                                    <Picker.Item label={t("Service.SelectState")} value={undefined} style={styles.pickerLabel} />
+                                    {states.map((s) => (
+                                        <Picker.Item key={`state ${s.geonameId}`} label={s.name} value={s} />
+                                    ))}
+                                </Picker>
+                            </View>
+                        </View>
+
+                        <View style={styles.selectLine}>
+                            <Text>{t("Service.SelectCity")}</Text>
+                            <View style={styles.selectBox}>
+                                <Picker selectedValue={city} onValueChange={(value) => setCity(value)} style={styles.select}>
+                                    <Picker.Item label={t("Service.SelectCity")} value={undefined} style={styles.pickerLabel} />
+                                    {cities.map((c) => (
+                                        <Picker.Item key={`city ${c.code}`} label={c.name} value={c} />
+                                    ))}
+                                </Picker>
+                            </View>
+                        </View>
+
+                    </ScrollView>
                 </View>
             </View>
-
-            <View style={styles.selectLine}>
-                <Text>{t("Service.SelectState")}</Text>
-                <View style={styles.selectBox}>
-                    <Picker selectedValue={state} onValueChange={(value) => setState(value)} style={styles.select}>
-                        <Picker.Item label={t("Service.SelectState")} value={undefined} style={styles.pickerLabel} />
-                        {states.map((s) => (
-                            <Picker.Item key={`state ${s.geonameId}`} label={s.name} value={s} />
-                        ))}
-                    </Picker>
-                </View>
-            </View>
-
-            <View style={styles.selectLine}>
-                <Text>{t("Service.SelectCity")}</Text>
-                <View style={styles.selectBox}>
-                    <Picker selectedValue={city} onValueChange={(value) => setCity(value)} style={styles.select}>
-                        <Picker.Item label={t("Service.SelectCity")} value={undefined} style={styles.pickerLabel} />
-                        {cities.map((c) => (
-                            <Picker.Item key={`city ${c.code}`} label={c.name} value={c} />
-                        ))}
-                    </Picker>
-                </View>
-            </View>
-
             <View style={styles.buttonLine}>
                 <TouchableOpacity onPress={handleSave} style={styles.button}>
                     <Text style={styles.textButton}>{t("Service.Save")}</Text>
@@ -161,6 +168,7 @@ const ServiceEdit: React.FC<ServiceEditProps> = ({ service, onSave, onCancel }) 
                     <Text style={styles.textButton}>{t("Service.Cancel")}</Text>
                 </TouchableOpacity>
             </View>
+
         </>
     );
 };
@@ -173,7 +181,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         gap: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 10
     },
     selectBox: {
         borderWidth: 2,
@@ -187,6 +196,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical:10,
         gap: 10,
     },
     pickerLabel: {
@@ -203,16 +214,30 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         gap: 10,
         alignItems: 'center',
+        marginTop: 10
     },
     button: {
         backgroundColor: '#469bc6',
         padding: 10,
         borderRadius: 5,
-        marginTop: 10,
     },
     textButton: {
         color: 'white',
         fontWeight: 'bold',
+    },
+    modalContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        height: 300,
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: '100%',
+        alignItems: 'center',
+        gap: 10,
     },
 });
 

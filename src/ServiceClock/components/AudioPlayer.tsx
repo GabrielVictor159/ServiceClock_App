@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { useTheme } from '../provider/ThemeProvider';
-import CustomSlider from './CustomSlider';
 
 interface AudioPlayerProps {
     audioUri: string;
@@ -77,7 +76,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUri, onFinish }) => {
                 sound.unloadAsync();
             }
         };
-    }, [sound]);
+    }, []);
+
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -91,26 +91,33 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUri, onFinish }) => {
 
     return (
         <View style={{ padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 10 }}>
-            <TouchableOpacity onPress={toggleAudio}>
-                <View style={{ width: 50, height: 50, borderRadius: 50, backgroundColor: theme.themeColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Image
-                        style={{ width: 20, height: 20, objectFit: 'contain', tintColor: theme.inverseText }}
-                        source={isPlaying ? require("../assets/pause.png") : require("../assets/play-button-arrowhead.png")} />
-                </View>
-            </TouchableOpacity>
-
-            {isBuffering && <Text>Buffering...</Text>}
-
-            <CustomSlider
+            <View
+            style={{ width: 50, height: 50, borderRadius: 50, backgroundColor: 'gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            >
+                <Image 
+                 style={{ width: 30, height: 30, objectFit: 'contain', tintColor: 'white' }}
+                 source={require("../assets/medium-volume.png")}/>
+            </View>
+            <View style={{width:'60%',height:35, overflow:'hidden', display:'flex',justifyContent:'center',alignItems:'center'}}>
+            <Slider
                 value={playbackPosition}
                 minimumValue={0}
                 maximumValue={playbackDuration}
                 onValueChange={onSliderValueChange}
-                thumbTintColor="#007AFF" // Cor da esfera (thumb)
-                minimumTrackTintColor="#007AFF" // Cor da barra preenchida
-                maximumTrackTintColor="#E0E0E0" // Cor da barra não preenchida
+                minimumTrackTintColor={theme.themeColor}
+                maximumTrackTintColor="gray"
+                thumbTintColor={theme.themeColor}
+                style={{width:'65%',transform: [{ scaleY: 2 },{scaleX:2}]}}
                 
             />
+            </View>
+            <TouchableOpacity onPress={toggleAudio}>
+                <View style={{ width: 40, height: 40, borderRadius: 50, backgroundColor: theme.themeColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image
+                        style={{ width: 20, height: 20, objectFit: 'contain', tintColor: 'white' }}
+                        source={isPlaying ? require("../assets/pause.png") : require("../assets/play-button-arrowhead.png")} />
+                </View>
+            </TouchableOpacity>
 
         </View>
     );

@@ -19,6 +19,9 @@ const resources = {
             SearchByName:"search by name",
             NewClient:"Add Client",
             PasswordsNotMatch:"passwords are not the same",
+            PickerErrorFileType:"Could not get file size.",
+            PickerFileSize:"The file exceeds the maximum size of 80MB.",
+            PickerType:"Choose file type",
             Service:{
                 Name:"Name",
                 Description:"Description",
@@ -160,6 +163,9 @@ const resources = {
             Search:"Pesquisar",
             NewClient:"Adicionar Cliente",
             PasswordsNotMatch:"Senhas não são iguais",
+            PickerErrorFileType:"Não foi possível obter o tamanho do arquivo.",
+            PickerFileSize:"O arquivo excede o tamanho máximo de 80MB.",
+            PickerType:"Escolha o tipo de arquivo",
             Service:{
                 Name:"Nome",
                 Description:"Descrição",

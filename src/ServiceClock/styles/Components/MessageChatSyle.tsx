@@ -40,32 +40,11 @@ export const createMessageChatStyle= (theme: Theme, isKeyboardHidden: boolean = 
             display:'flex',
             flexDirection:'row',
             justifyContent:'center',
-            alignItems:'center',
+            alignItems:'flex-end',
             height:isKeyboardHidden?'10%':'15%',
             gap:10,
-            paddingLeft:'10%',
-            paddingRight:'10%'
-        },
-        inputView:{
-            minWidth:'70%',
-            minHeight:45,
-            maxHeight:90,
-            backgroundColor:"#E9E9E9",
-            borderRadius:10,
-            borderWidth:1,
-            elevation:2,
-            display:'flex',
-            flexDirection:'row',
-            justifyContent:'space-around',
-            alignItems:'center',
-            gap:5,
-        },
-        input:{
-            width:'85%',
-            padding:10,
-            flexGrow:1,
-            flexWrap:'wrap',
-            overflow:'scroll'
+            paddingLeft:'15%',
+            paddingRight:'15%',
         },
         imageAttachFile:{
             width:30,
@@ -124,15 +103,53 @@ export const createMessageChatStyle= (theme: Theme, isKeyboardHidden: boolean = 
         modalCancel: {
             fontSize: 16,
             color: 'red',
+            marginTop:10
         },
         selectedImage: {
-            width: 100,
-            height: 100,
-            resizeMode: 'contain',
+            width:200,
+            height:100
+        },
+        inputViewColumn:{
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'flex-end',
+            minWidth:270,
+            gap:5
+        },
+        inputView:{
+            width:'100%',
+            minHeight:45,
+            maxHeight:90,
+            backgroundColor:"#E9E9E9",
+            borderRadius:10,
+            borderWidth:1,
+            elevation:2,
+            display:'flex',
+            flexDirection:'row',
+            justifyContent:'space-around',
+            alignItems:'center',
+            gap:5,
+            paddingHorizontal:15
+        },
+        input:{
+            width:'100%',
+            padding:10,
+            flexGrow:1,
+            flexWrap:'wrap',
+            overflow:'scroll'
         },
         selectedFileView:{
-            width:geral.windowWidth-70,
-            height:200,
-            backgroundColor:'white'
+            width:'100%',
+            maxHeight:150,
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'center',
+            alignItems:'center',
+            backgroundColor:"#E9E9E9",
+            borderWidth:1,
+            borderRadius:10,
+            padding:20,
+            gap:10,
+
         }
     });
