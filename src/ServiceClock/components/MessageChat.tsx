@@ -10,7 +10,7 @@ import { useEspecialButtons } from '../provider/EspecialButtonsProvider';
 import DefaultLayout from './DefaultLayout';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { MessageType } from '../services/MessageService';
+import { CreateMessageRequest, MessageService, MessageType } from '../services/MessageService';
 import VideoPlayer from 'expo-video-player'
 import { Audio, ResizeMode, Video } from 'expo-av';
 import AudioPlayer from './AudioPlayer';
@@ -18,17 +18,22 @@ import mimeDb from 'mime-db';
 import Toast from 'react-native-toast-message';
 import VideoPlayerWithControls from './VideoPlayerWithControls';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ServiceFactory, ServiceType } from '../services/ServiceFactory';
+import { AuthenticationItem, useAuthentication } from '../provider/AuthenticationProvider';
+import { convertUriToBase64 } from '../utils/Files';
 
 interface MessageChatProps {
     otherUser: any;
+    otherUserType: 'Company' | 'Client';
     onBack?: () => void;
 }
 
-const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
+const MessageChat: React.FC<MessageChatProps> = ({ otherUser, otherUserType, onBack }) => {
     const { theme } = useTheme();
     const { t } = useTranslation();
     const { isKeyboardHidden } = useKeyboard();
     const { isEspecialButtonsVisible, setIsEspecialButtonsVisible } = useEspecialButtons();
+    const { authenticationItem } = useAuthentication();
     const styles = createMessageChatStyle(theme, isKeyboardHidden);
 
     const [message, setMessage] = useState<string>("");
@@ -94,43 +99,44 @@ const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
 
     const handleImagePicker = async () => {
         try {
-        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (permission.granted) {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                quality: 1,
-            });
+            if (permission.granted) {
+                const result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.All,
+                    allowsEditing: true,
+                    quality: 1,
+                });
 
-            if (!result.canceled) {
-                const { uri, type, fileName, fileSize } = result.assets[0];
+                if (!result.canceled) {
+                    const { uri, type, fileName, fileSize } = result.assets[0];
 
-                if (fileSize === undefined) {
-                    Toast.show({
-                        type: 'error',
-                        text1: 'Erro',
-                        text2: t("PickerErrorFileType"),
-                    });
-                    return;
+                    if (fileSize === undefined) {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Erro',
+                            text2: t("PickerErrorFileType"),
+                        });
+                        return;
+                    }
+
+                    if (fileSize > MAX_FILE_SIZE) {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Erro',
+                            text2: t("PickerFileSize"),
+                        });
+                        return;
+                    }
+
+                    setSelectedFileType(type === 'video' ? MessageType.Video : MessageType.Img);
+                    setSelectedFile({ uri, name: fileName });
                 }
-
-                if (fileSize > MAX_FILE_SIZE) {
-                    Toast.show({
-                        type: 'error',
-                        text1: 'Erro',
-                        text2: t("PickerFileSize"),
-                    });
-                    return;
-                }
-
-                setSelectedFileType(type === 'video' ? MessageType.Video : MessageType.Img);
-                setSelectedFile({ uri, name: fileName });
+            } else {
+                console.log('Permission to access media library is required!');
             }
-        } else {
-            console.log('Permission to access media library is required!');
-        }}
-        catch{}
+        }
+        catch { }
     };
 
     const showPickerModal = () => {
@@ -145,7 +151,7 @@ const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
         if (!selectedFile || !selectedFile.uri) {
             return null;
         }
-    
+
         if (selectedFileType === MessageType.Img) {
             return <Image source={{ uri: selectedFile.uri }} style={styles.selectedImage} />;
         } else if (selectedFileType === MessageType.Video) {
@@ -176,8 +182,40 @@ const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
             return null;
         }
     };
-    
 
+    const messageService = ServiceFactory.createService(ServiceType.Message) as MessageService;
+
+    const sendMessage = async () => {
+        if (authenticationItem) {
+            if (selectedFile && selectedFileType) {
+                let content = await convertUriToBase64(selectedFile.uri);
+                if (content) {
+                    let request = new CreateMessageRequest(selectedFileType, otherUserType === 'Company' ? authenticationItem.UserId : otherUser.id,
+                        otherUserType === 'Client' ? authenticationItem.UserId : otherUser.id, content,selectedFile.name);
+                    
+                        console.log("request", request);
+                    
+                    const [data,isSucess] = await messageService.CreateMessage(request,authenticationItem);
+
+                    if(isSucess){
+                        setSelectedFile(null);
+                        setSelectedFileType(null);
+                    }
+                }
+            }
+            if(message!==""){
+                let request = new CreateMessageRequest(MessageType.Txt, otherUserType === 'Company' ? authenticationItem.UserId : otherUser.id,
+                    otherUserType === 'Client' ? authenticationItem.UserId : otherUser.id, message);
+                
+                    const [data,isSucess] = await messageService.CreateMessage(request,authenticationItem);
+
+                    if(isSucess){
+                        setMessage("");
+                    }
+            }
+        }
+
+    }
 
     return (
         <DefaultLayout containerStyle={styles.defaultLayout}>
@@ -202,7 +240,7 @@ const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
                     {selectedFile && (
                         <View style={styles.selectedFileView}>
                             <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                <TouchableOpacity onPress={()=>{setSelectedFileType(null); setSelectedFile(null); }}>
+                                <TouchableOpacity onPress={() => { setSelectedFileType(null); setSelectedFile(null); }}>
                                     <Image style={{ width: 15, height: 15, objectFit: 'contain', tintColor: theme.themeColor }} source={require("../assets/close.png")} />
                                 </TouchableOpacity>
                             </View>
@@ -226,7 +264,7 @@ const MessageChat: React.FC<MessageChatProps> = ({ otherUser, onBack }) => {
                     </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => { sendMessage(); }}>
                     <View style={styles.sendIconView}>
                         <Image
                             style={styles.sendIcon}
