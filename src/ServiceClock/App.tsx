@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Modal } from 'react-native';
 import Pages from './app/Pages';
 import { PageProvider } from './provider/PageProvider';
 import { ThemeProvider } from './provider/ThemeProvider';
@@ -22,7 +22,7 @@ const App: React.FC = () => {
               <KeyboardProvider>
                 <EspecialButtonsProvider>
                   <Pages />
-                  <Toast />
+                    <Toast />
                   <LoadingScreen />
                 </EspecialButtonsProvider>
               </KeyboardProvider>

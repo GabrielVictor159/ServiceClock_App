@@ -13,6 +13,7 @@ export type Theme = {
   themeBackground: string;
   inputBackground: string;
   redColor:string;
+  darkMode:boolean;
 };
 
 const lightTheme: Theme = {
@@ -27,7 +28,8 @@ const lightTheme: Theme = {
   themeColorHighlitch: "#16aee0",
   themeBackground: 'white',
   inputBackground: '#ffffff',
-  redColor:"#f05648"
+  redColor:"#f05648",
+  darkMode:false,
 
 };
 
@@ -43,7 +45,8 @@ const darkTheme: Theme = {
   themeColorHighlitch: "#16aee0",
   themeBackground: '#1f1f1f',
   inputBackground: '#ffffff',
-  redColor:"#f05648"
+  redColor:"#f05648",
+  darkMode:true
 };
 
 interface ThemeContextProps {

@@ -2,6 +2,7 @@ import Toast from "react-native-toast-message";
 
 export class ServiceCore{
     protected ShowError = (error:any) => {
+        console.log(error);
         if (Array.isArray(error.response.data)) {
             error.response.data.forEach((element: any) => {
                 Toast.show({

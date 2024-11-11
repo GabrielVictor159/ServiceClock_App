@@ -26,6 +26,7 @@ export const formatUTCToLocale = (dateTimeString: string, language: string) => {
 };
 
 export const formatLocaleToUTC = (localDateTimeString: string, language: string) => {
+    try{
     let timeZone: string;
     if (language === 'pt') {
         timeZone = 'America/Sao_Paulo';
@@ -38,4 +39,8 @@ export const formatLocaleToUTC = (localDateTimeString: string, language: string)
     const utcDate = moment.tz(localDateTimeString, timeZone).utc().format();
 
     return utcDate;
+    }
+    catch(error:any){
+        console.log(error);
+    }
 };

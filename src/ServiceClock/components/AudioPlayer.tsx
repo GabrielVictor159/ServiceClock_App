@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ViewStyle } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { useTheme } from '../provider/ThemeProvider';
 
 interface AudioPlayerProps {
     audioUri: string;
+    containerStyle?: ViewStyle;
+    iconContainerStyle?: ViewStyle;
+    sliderContainerStyle?: ViewStyle;
+    playContainerStyle?: ViewStyle;
     onFinish?: () => void;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUri, onFinish }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUri, onFinish, containerStyle, iconContainerStyle, sliderContainerStyle, playContainerStyle}) => {
     const { theme } = useTheme();
 
     const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -90,31 +94,31 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUri, onFinish }) => {
     }, [isPlaying, playbackPosition, playbackDuration]);
 
     return (
-        <View style={{ padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 10 }}>
+        <View style={[{  display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 10 },containerStyle]}>
             <View
-            style={{ width: 50, height: 50, borderRadius: 50, backgroundColor: 'gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                style={[{ width: 50, height: 50, borderRadius: 50, backgroundColor: 'gray', display: 'flex', justifyContent: 'center', alignItems: 'center' }, iconContainerStyle]}
             >
-                <Image 
-                 style={{ width: 30, height: 30, objectFit: 'contain', tintColor: 'white' }}
-                 source={require("../assets/medium-volume.png")}/>
+                <Image
+                    style={{ width: '60%', height: '60%', objectFit: 'contain', tintColor: 'white' }}
+                    source={require("../assets/medium-volume.png")} />
             </View>
-            <View style={{width:'60%',height:35, overflow:'hidden', display:'flex',justifyContent:'center',alignItems:'center'}}>
-            <Slider
-                value={playbackPosition}
-                minimumValue={0}
-                maximumValue={playbackDuration}
-                onValueChange={onSliderValueChange}
-                minimumTrackTintColor={theme.themeColor}
-                maximumTrackTintColor="gray"
-                thumbTintColor={theme.themeColor}
-                style={{width:'65%',transform: [{ scaleY: 2 },{scaleX:2}]}}
-                
-            />
+            <View style={[{ width: '60%', height: 35, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }, sliderContainerStyle]}>
+                <Slider
+                    value={playbackPosition}
+                    minimumValue={0}
+                    maximumValue={playbackDuration}
+                    onValueChange={onSliderValueChange}
+                    minimumTrackTintColor={theme.themeColor}
+                    maximumTrackTintColor="gray"
+                    thumbTintColor={theme.themeColor}
+                    style={{ width: '65%', transform: [{ scaleY: 2 }, { scaleX: 2 }] }}
+
+                />
             </View>
             <TouchableOpacity onPress={toggleAudio}>
-                <View style={{ width: 40, height: 40, borderRadius: 50, backgroundColor: theme.themeColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={[{ width: 40, height: 40, borderRadius: 50, backgroundColor: theme.themeColor, display: 'flex', justifyContent: 'center', alignItems: 'center' },playContainerStyle]}>
                     <Image
-                        style={{ width: 20, height: 20, objectFit: 'contain', tintColor: 'white' }}
+                        style={{ width: "50%", height: "50%", objectFit: 'contain', tintColor: 'white' }}
                         source={isPlaying ? require("../assets/pause.png") : require("../assets/play-button-arrowhead.png")} />
                 </View>
             </TouchableOpacity>

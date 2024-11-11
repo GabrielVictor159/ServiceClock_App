@@ -29,6 +29,7 @@ import { useKeyboard } from '../provider/KeyboardProvider';
 import LoadingScreen from '../components/LoadingScreen';
 import { useEspecialButtons } from '../provider/EspecialButtonsProvider';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 const MaterialTab = createMaterialTopTabNavigator();

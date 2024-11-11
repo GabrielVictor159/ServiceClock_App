@@ -15,7 +15,7 @@ export class ClientService extends ServiceCore {
     public async GetClientById(Id:string,authenticationItem:AuthenticationItem, setIsLoading?:(loading: boolean)=>void): Promise<[any, boolean]> {
         try {
             setIsLoading?.(true);
-            var response = await axios.get(`${this.environment.apiUrl}GetClient/${Id}`,{
+            var response = await axios.get(`${this.environment.apiUrl}GetClientById/${Id}`,{
                 headers:{
                     Authorization: `Bearer ${authenticationItem!.Token}`,
                     'Content-Type': 'application/json'

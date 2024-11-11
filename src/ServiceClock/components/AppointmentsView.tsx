@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { getStatusColor, getStatusText } from "../utils/AppointmentStatus";
 import { formatLocaleToUTC, formatUTCToLocale } from "../utils/Dates";
 import { ServiceFactory, ServiceType } from "../services/ServiceFactory";
-import { AlterStateAppointmentRequest, AppointmentService } from "../services/AppointmentService";
+import { AlterStateAppointmentRequest, AppointmentService, RequestAppointmentRequest } from "../services/AppointmentService";
 import { useAuthentication } from "../provider/AuthenticationProvider";
 import Picker from "react-native-picker-select";
 import RNPickerSelect from 'react-native-picker-select';
@@ -78,7 +78,6 @@ const AppointmentsView: React.FC<AppointmentsViewProps> = ({
 
     const handleAddAppointment = async () => {
         if (authenticationItem !== undefined) {
-    
             const combinedDateTime = moment(day)
                 .hour(Number(selectedHour))
                 .minute(Number(selectedMinute))
@@ -86,193 +85,190 @@ const AppointmentsView: React.FC<AppointmentsViewProps> = ({
                 .millisecond(0);
 
             let utcDateTime = formatLocaleToUTC(combinedDateTime.format(), i18n.language);
-    
-            let request = {
-                ServiceId: service.id,
-                Date: utcDateTime, 
-                Description: comment
-            };
-            const response = await appointmentService.RequestAppointment(request, authenticationItem);
-            if (response[1] === true) {
-                const newAppointments = [response[0].appointment, ...appointmentsVisible];
-                handleSetAppointmentsByVisible(newAppointments);
-                setAddAppointment(false);
-                setComment("");
-                setSelectedHour(undefined);
-                setSelectedMinute(undefined);
+            if (utcDateTime) {
+                let request = new RequestAppointmentRequest(service.id, utcDateTime, comment);
+                const response = await appointmentService.RequestAppointment(request, authenticationItem);
+                if (response[1] === true) {
+                    const newAppointments = [response[0].appointment, ...appointmentsVisible];
+                    handleSetAppointmentsByVisible(newAppointments);
+                    setAddAppointment(false);
+                    setComment("");
+                    setSelectedHour(undefined);
+                    setSelectedMinute(undefined);
+                }
             }
         }
     };
-    
+
     return (
         <>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visible}
-            onRequestClose={handleBackgroundPress}
-        >
-            <View style={styles.centeredView}>
-                <TouchableWithoutFeedback onPress={handleBackgroundPress}>
-                    <View style={styles.background} />
-                </TouchableWithoutFeedback>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={visible}
+                onRequestClose={handleBackgroundPress}
+            >
+                <View style={styles.centeredView}>
+                    <TouchableWithoutFeedback onPress={handleBackgroundPress}>
+                        <View style={styles.background} />
+                    </TouchableWithoutFeedback>
 
-                <View style={styles.modalView}>
-                    {addAppointment === false && (
-                        <ScrollView>
-                            {appointmentsVisible.map((appointment, index) => (
-                                <View key={index} style={styles.boxLine}>
-                                    <UserImage
-                                        width={50}
-                                        height={50}
-                                        source={
-                                            appointment.client !== null && appointment.client !== undefined
-                                                ? appointment.client.clientImage
-                                                : null
-                                        }
-                                    />
-                                    <View style={styles.textBox}>
-                                        <Text style={styles.textLine}>
-                                            {`${t("Name")}${appointment.client !== null && appointment.client !== undefined ? appointment.client.name : ""}`}
-                                        </Text>
-                                        <Text style={styles.textLine}>
-                                            {`${t("Address")}${appointment.client !== null && appointment.client !== undefined
-                                                ? appointment.client.address + ", " + appointment.client.state + ", " + appointment.client.city + ", " + appointment.client.postalCode
-                                                : ""}`}
-                                        </Text>
-                                        <Text style={styles.textLine}>
-                                            {`${t("CreationDate")}${formatUTCToLocale(appointment.createdAt, i18n.language)}`}
-                                        </Text>
-                                        <Text style={styles.textLine}>
-                                            {`${t("ScheduledDate")}${formatUTCToLocale(appointment.date, i18n.language)}`}
-                                        </Text>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                            <Text>{`${t("Status")}${t(getStatusText(appointment.status))}`}</Text>
-                                            <View style={{ width: 20, height: 20, borderRadius: 20, backgroundColor: getStatusColor(appointment.status) }}></View>
+                    <View style={styles.modalView}>
+                        {addAppointment === false && (
+                            <ScrollView>
+                                {appointmentsVisible.map((appointment, index) => (
+                                    <View key={index} style={styles.boxLine}>
+                                        <UserImage
+                                            width={50}
+                                            height={50}
+                                            source={
+                                                appointment.client !== null && appointment.client !== undefined
+                                                    ? appointment.client.clientImage
+                                                    : null
+                                            }
+                                        />
+                                        <View style={styles.textBox}>
+                                            <Text style={styles.textLine}>
+                                                {`${t("Name")}${appointment.client !== null && appointment.client !== undefined ? appointment.client.name : ""}`}
+                                            </Text>
+                                            <Text style={styles.textLine}>
+                                                {`${t("Address")}${appointment.client !== null && appointment.client !== undefined
+                                                    ? appointment.client.address + ", " + appointment.client.state + ", " + appointment.client.city + ", " + appointment.client.postalCode
+                                                    : ""}`}
+                                            </Text>
+                                            <Text style={styles.textLine}>
+                                                {`${t("CreationDate")}${formatUTCToLocale(appointment.createdAt, i18n.language)}`}
+                                            </Text>
+                                            <Text style={styles.textLine}>
+                                                {`${t("ScheduledDate")}${formatUTCToLocale(appointment.date, i18n.language)}`}
+                                            </Text>
+                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                                <Text>{`${t("Status")}${t(getStatusText(appointment.status))}`}</Text>
+                                                <View style={{ width: 20, height: 20, borderRadius: 20, backgroundColor: getStatusColor(appointment.status) }}></View>
+                                            </View>
+                                            <Text style={styles.textLine}>{`${t("Comment")}${appointment.description}`}</Text>
+                                            {
+                                                (appointment.status === 1 && isClient !== true) && (
+                                                    <View style={styles.ButtonBox}>
+                                                        <TouchableOpacity
+                                                            style={styles.Button}
+                                                            onPress={() => { alterState(appointment, 2); }}
+                                                        >
+                                                            <Text style={styles.ButtonText}>{t('appointmentView.Aprove')}</Text>
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={styles.Button}
+                                                            onPress={() => { alterState(appointment, 3); }}
+                                                        >
+                                                            <Text style={styles.ButtonText}>{t('appointmentView.Reject')}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                )
+                                            }
+                                            {
+                                                appointment.status === 2 && (
+                                                    <View style={styles.ButtonBox}>
+                                                        <TouchableOpacity
+                                                            style={styles.Button}
+                                                            onPress={() => { alterState(appointment, 4); }}
+                                                        >
+                                                            <Text style={styles.ButtonText}>{t('appointmentView.Cancel')}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                )
+                                            }
                                         </View>
-                                        <Text style={styles.textLine}>{`${t("Comment")}${appointment.description}`}</Text>
-                                        {
-                                            (appointment.status === 1 && isClient !== true) && (
-                                                <View style={styles.ButtonBox}>
-                                                    <TouchableOpacity
-                                                        style={styles.Button}
-                                                        onPress={() => { alterState(appointment, 2); }}
-                                                    >
-                                                        <Text style={styles.ButtonText}>{t('appointmentView.Aprove')}</Text>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity
-                                                        style={styles.Button}
-                                                        onPress={() => { alterState(appointment, 3); }}
-                                                    >
-                                                        <Text style={styles.ButtonText}>{t('appointmentView.Reject')}</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            )
-                                        }
-                                        {
-                                            appointment.status === 2 && (
-                                                <View style={styles.ButtonBox}>
-                                                    <TouchableOpacity
-                                                        style={styles.Button}
-                                                        onPress={() => { alterState(appointment, 4); }}
-                                                    >
-                                                        <Text style={styles.ButtonText}>{t('appointmentView.Cancel')}</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            )
-                                        }
                                     </View>
-                                </View>
-                            ))}
-                        </ScrollView>
-                    )}
-                    {
-                        addAppointment === true && (
-                            <View>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                                    <Text style={{ marginRight: 10 }}>{t('appointmentView.Hour')}</Text>
-                                    <View style={styles.inputHourBox}>
-                                        <RNPickerSelect
-                                            onValueChange={(itemValue) => setSelectedHour(itemValue)}
-                                            placeholder={{
-                                                label: 'Hour',
-                                                value: null
-                                            }}
-                                            items={Array.from({ length: 24 }, (_, i) => ({
-                                                label: i.toString().padStart(2, '0'),
-                                                value: i,
-                                                key: i
-                                            }))}
-                                            value={selectedHour}
-                                            style={{
-                                                inputAndroid: styles.inputHour,
-                                                inputIOS: styles.inputHour
-                                            }}
+                                ))}
+                            </ScrollView>
+                        )}
+                        {
+                            addAppointment === true && (
+                                <View>
+                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                                        <Text style={{ marginRight: 10 }}>{t('appointmentView.Hour')}</Text>
+                                        <View style={styles.inputHourBox}>
+                                            <RNPickerSelect
+                                                onValueChange={(itemValue) => setSelectedHour(itemValue)}
+                                                placeholder={{
+                                                    label: 'Hour',
+                                                    value: null
+                                                }}
+                                                items={Array.from({ length: 24 }, (_, i) => ({
+                                                    label: i.toString().padStart(2, '0'),
+                                                    value: i,
+                                                    key: i
+                                                }))}
+                                                value={selectedHour}
+                                                style={{
+                                                    inputAndroid: styles.inputHour,
+                                                    inputIOS: styles.inputHour
+                                                }}
+                                            />
+                                        </View>
+                                        <Text style={{ marginHorizontal: 5 }}>:</Text>
+                                        <View style={styles.inputHourBox}>
+                                            <RNPickerSelect
+                                                onValueChange={(itemValue) => setSelectedMinute(itemValue)}
+                                                placeholder={{
+                                                    label: 'Minute',
+                                                    value: null
+                                                }}
+                                                items={Array.from({ length: 60 }, (_, i) => ({
+                                                    label: i.toString().padStart(2, '0'),
+                                                    value: i,
+                                                    key: i
+                                                }))}
+                                                value={selectedMinute}
+                                                style={{
+                                                    inputAndroid: styles.inputHour,
+                                                    inputIOS: styles.inputHour
+                                                }}
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                                        <Text style={{ marginRight: 10 }}>{t('appointmentView.Comment')}</Text>
+                                        <TextInput
+                                            multiline
+                                            numberOfLines={4}
+                                            placeholder={t('appointmentView.CommentPlaceholder')}
+                                            style={styles.inputComment}
+                                            onChangeText={(text) => setComment(text)}
+                                            value={comment}
                                         />
                                     </View>
-                                    <Text style={{ marginHorizontal: 5 }}>:</Text>
-                                    <View style={styles.inputHourBox}>
-                                        <RNPickerSelect
-                                            onValueChange={(itemValue) => setSelectedMinute(itemValue)}
-                                            placeholder={{
-                                                label: 'Minute',
-                                                value: null
-                                            }}
-                                            items={Array.from({ length: 60 }, (_, i) => ({
-                                                label: i.toString().padStart(2, '0'),
-                                                value: i,
-                                                key: i
-                                            }))}
-                                            value={selectedMinute}
-                                            style={{
-                                                inputAndroid: styles.inputHour,
-                                                inputIOS: styles.inputHour
-                                            }}
-                                        />
+                                    <View style={styles.ButtonLine}>
+                                        <TouchableOpacity
+                                            style={styles.Button}
+                                            onPress={() => { setAddAppointment(false); setComment(""); setSelectedHour(undefined); setSelectedMinute(undefined); }}
+                                        >
+                                            <Text style={styles.ButtonText}>{t('appointmentView.Cancel')}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.Button}
+                                            onPress={() => { handleAddAppointment(); }}
+                                        >
+                                            <Text style={styles.ButtonText}>{t('appointmentView.Add')}</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                                    <Text style={{ marginRight: 10 }}>{t('appointmentView.Comment')}</Text>
-                                    <TextInput
-                                        multiline
-                                        numberOfLines={4}
-                                        placeholder={t('appointmentView.CommentPlaceholder')}
-                                        style={styles.inputComment}
-                                        onChangeText={(text) => setComment(text)}
-                                        value={comment}
-                                    />
-                                </View>
-                                <View style={styles.ButtonLine}>
-                                    <TouchableOpacity
-                                        style={styles.Button}
-                                        onPress={() => { setAddAppointment(false); setComment(""); setSelectedHour(undefined); setSelectedMinute(undefined); }}
-                                    >
-                                        <Text style={styles.ButtonText}>{t('appointmentView.Cancel')}</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={styles.Button}
-                                        onPress={() => { handleAddAppointment();}}
-                                    >
-                                        <Text style={styles.ButtonText}>{t('appointmentView.Add')}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        )
-                    }
+                            )
+                        }
 
-                    {(isClient === true && addAppointment === false) && (
-                        <>
-                            <TouchableOpacity
-                                style={styles.ButtonAddAppointment}
-                                onPress={() => setAddAppointment(true)}
-                            >
-                                <Text style={styles.ButtonText}>{t('appointmentView.adicionarApontamento')}</Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
+                        {(isClient === true && addAppointment === false) && (
+                            <>
+                                <TouchableOpacity
+                                    style={styles.ButtonAddAppointment}
+                                    onPress={() => setAddAppointment(true)}
+                                >
+                                    <Text style={styles.ButtonText}>{t('appointmentView.adicionarApontamento')}</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                    </View>
                 </View>
-            </View>
-        </Modal>
+            </Modal>
         </>
     );
 };

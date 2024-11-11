@@ -1,3 +1,5 @@
+import { Linking } from "react-native";
+
 export async function convertUriToBase64(uri: string): Promise<string | null> {
     try {
       const response = await fetch(uri);
@@ -20,4 +22,18 @@ export async function convertUriToBase64(uri: string): Promise<string | null> {
       return null;
     }
   }
+
+export const handleDownload = async (file:any) => {
+  try {
+      const supported = await Linking.canOpenURL(file.uri); 
+      if (supported) {
+          Linking.openURL(file.uri); 
+          console.log('Arquivo aberto para download:', file.uri);
+      } else {
+          console.error('Não é possível abrir o arquivo:', file.uri);
+      }
+  } catch (error) {
+      console.error('Erro ao tentar abrir o arquivo:', error);
+  }
+};
   

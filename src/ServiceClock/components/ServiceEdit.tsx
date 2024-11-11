@@ -177,19 +177,19 @@ const ServiceEdit: React.FC<ServiceEditProps> = ({ service, onSave, onCancel }) 
 const styles = StyleSheet.create({
     input: { borderWidth: 1, borderRadius: 10, borderColor: '#ccc', padding: 8, flexGrow: 1 },
     selectLine: {
-        width: '100%',
+        width:200,
         display: 'flex',
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
     selectBox: {
         borderWidth: 2,
         borderColor: '#e3e3e3',
-        flexGrow: 1,
         borderRadius: 10,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        flexGrow:1
     },
     buttonLine: {
         width: '100%',
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     modalContainer: {
+        width:'100%',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

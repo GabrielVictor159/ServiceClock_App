@@ -33,18 +33,24 @@ export const createMessageChatStyle= (theme: Theme, isKeyboardHidden: boolean = 
             width:geral.windowWidth,
             display:'flex',
             flexDirection:'column',
-            height:isKeyboardHidden?'70%':'64%'
+            height:isKeyboardHidden?'70%':'64%',
+            backgroundColor:theme.darkMode ? 'rgba(235, 235, 235, 0)' : 'rgba(235, 235, 235, 0.8)',
+        },
+        scrollBox:{
+            padding:20,
+            gap:20
         },
         footer:{
             width:geral.windowWidth,
             display:'flex',
             flexDirection:'row',
             justifyContent:'center',
-            alignItems:'flex-end',
-            height:isKeyboardHidden?'10%':'15%',
+            alignItems:'center',
+            height:isKeyboardHidden?'11%':'15%',
             gap:10,
             paddingLeft:'15%',
             paddingRight:'15%',
+            backgroundColor: theme.darkMode ? 'rgba(235, 235, 235, 0)' : 'rgba(235, 235, 235, 0.8)'
         },
         imageAttachFile:{
             width:30,
@@ -70,13 +76,15 @@ export const createMessageChatStyle= (theme: Theme, isKeyboardHidden: boolean = 
             width:'100%',
             display:'flex',
             flexDirection:'row',
-            alignItems:'center'
+            alignItems:'center',
+            paddingHorizontal:15,
+            marginTop:15,
         },
         lineOtherUser:{
             justifyContent:'flex-start'
         },
         lineActualUser:{
-            justifyContent:'flex-end'
+            justifyContent:'flex-end',
         },
         modalOverlay: {
             flex: 1,
@@ -151,5 +159,44 @@ export const createMessageChatStyle= (theme: Theme, isKeyboardHidden: boolean = 
             padding:20,
             gap:10,
 
+        },
+        filePreviewContainer: {
+            width: 200,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+        },
+        filePreview: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+        },
+        fileIcon: {
+            width: 50,
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'gray',
+            borderRadius: 50,
+        },
+        fileIconImage: {
+            width: 30,
+            height: 30,
+            objectFit: 'contain',
+            tintColor: 'white',
+        },
+        fileName: {
+            fontSize: 20,
+        },
+        messageBox:{
+            backgroundColor:'white',
+            borderRadius:10,
+            elevation:5,
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center',
+            padding:10
         }
     });

@@ -152,7 +152,7 @@ const createStyles = (theme: Theme) =>
             backgroundColor: 'white',
             padding: 20,
             borderRadius: 10,
-            width: '80%',
+            width: '90%',
             alignItems: 'center',
             gap: 10,
         },

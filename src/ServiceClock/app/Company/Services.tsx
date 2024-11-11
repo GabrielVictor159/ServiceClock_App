@@ -76,9 +76,12 @@ const Services: React.FC = () => {
                             <Text style={styles.addServiceText}>{t("Service.AddService")}</Text>
                         </TouchableOpacity>
                     </View>
-
                     <Modal visible={newItem} animationType="slide" transparent={true}>
-                        <ServiceEdit onSave={onSaveNewItem} onCancel={onCancelNewItem} />
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                            <ServiceEdit onSave={onSaveNewItem} onCancel={onCancelNewItem} />
+                            </View>
+                        </View>
                     </Modal>
                 </View>
             </DefaultLayout>

@@ -141,7 +141,7 @@ const MensagensCompany: React.FC = () => {
                 </DefaultLayout>
                 :
                 <>
-                    <MessageChat otherUser={selectClient} onBack={()=>{setSelectClient(undefined);}}/>
+                    <MessageChat otherUserType='Client' otherUser={selectClient} onBack={()=>{setSelectClient(undefined);}}/>
                 </>
             }
 

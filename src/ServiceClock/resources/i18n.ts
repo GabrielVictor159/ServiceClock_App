@@ -22,6 +22,7 @@ const resources = {
             PickerErrorFileType:"Could not get file size.",
             PickerFileSize:"The file exceeds the maximum size of 80MB.",
             PickerType:"Choose file type",
+            MessageNotSuport:"format of untreated received message",
             Service:{
                 Name:"Name",
                 Description:"Description",
@@ -166,6 +167,7 @@ const resources = {
             PickerErrorFileType:"Não foi possível obter o tamanho do arquivo.",
             PickerFileSize:"O arquivo excede o tamanho máximo de 80MB.",
             PickerType:"Escolha o tipo de arquivo",
+            MessageNotSuport:"formato da mensagem recebida não tratada",
             Service:{
                 Name:"Nome",
                 Description:"Descrição",
